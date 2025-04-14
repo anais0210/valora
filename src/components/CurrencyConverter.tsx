@@ -13,6 +13,171 @@ interface ConversionResult {
   targetCurrency: string;
 }
 
+// Noms complets des devises
+const CURRENCY_NAMES: Record<string, string> = {
+  AED: 'Dirham des Émirats arabes unis',
+  AFN: 'Afghani afghan',
+  ALL: 'Lek albanais',
+  AMD: 'Dram arménien',
+  ANG: 'Florin des Antilles néerlandaises',
+  AOA: 'Kwanza angolais',
+  ARS: 'Peso argentin',
+  AUD: 'Dollar australien',
+  AWG: 'Florin arubais',
+  AZN: 'Manat azerbaïdjanais',
+  BAM: 'Mark convertible de Bosnie-Herzégovine',
+  BBD: 'Dollar barbadien',
+  BDT: 'Taka bangladais',
+  BGN: 'Lev bulgare',
+  BHD: 'Dinar bahreïni',
+  BIF: 'Franc burundais',
+  BMD: 'Dollar bermudien',
+  BND: 'Dollar de Brunei',
+  BOB: 'Boliviano bolivien',
+  BRL: 'Real brésilien',
+  BSD: 'Dollar bahaméen',
+  BTN: 'Ngultrum bhoutanais',
+  BWP: 'Pula botswanais',
+  BYN: 'Rouble biélorusse',
+  BZD: 'Dollar bélizien',
+  CAD: 'Dollar canadien',
+  CDF: 'Franc congolais',
+  CHF: 'Franc suisse',
+  CLP: 'Peso chilien',
+  CNY: 'Yuan chinois',
+  COP: 'Peso colombien',
+  CRC: 'Colón costaricain',
+  CUP: 'Peso cubain',
+  CVE: 'Escudo cap-verdien',
+  CZK: 'Couronne tchèque',
+  DJF: 'Franc djiboutien',
+  DKK: 'Couronne danoise',
+  DOP: 'Peso dominicain',
+  DZD: 'Dinar algérien',
+  EGP: 'Livre égyptienne',
+  ERN: 'Nakfa érythréen',
+  ETB: 'Birr éthiopien',
+  EUR: 'Euro',
+  FJD: 'Dollar fidjien',
+  FKP: 'Livre des îles Falkland',
+  FOK: 'Couronne féroïenne',
+  GBP: 'Livre sterling',
+  GEL: 'Lari géorgien',
+  GGP: 'Livre de Guernesey',
+  GHS: 'Cedi ghanéen',
+  GIP: 'Livre de Gibraltar',
+  GMD: 'Dalasi gambien',
+  GNF: 'Franc guinéen',
+  GTQ: 'Quetzal guatémaltèque',
+  GYD: 'Dollar guyanien',
+  HKD: 'Dollar de Hong Kong',
+  HNL: 'Lempira hondurien',
+  HRK: 'Kuna croate',
+  HTG: 'Gourde haïtienne',
+  HUF: 'Forint hongrois',
+  IDR: 'Roupie indonésienne',
+  ILS: 'Shekel israélien',
+  IMP: 'Livre de l\'île de Man',
+  INR: 'Roupie indienne',
+  IQD: 'Dinar irakien',
+  IRR: 'Rial iranien',
+  ISK: 'Couronne islandaise',
+  JEP: 'Livre de Jersey',
+  JMD: 'Dollar jamaïcain',
+  JOD: 'Dinar jordanien',
+  JPY: 'Yen japonais',
+  KES: 'Shilling kényan',
+  KGS: 'Som kirghize',
+  KHR: 'Riel cambodgien',
+  KID: 'Dollar des Kiribati',
+  KMF: 'Franc comorien',
+  KRW: 'Won sud-coréen',
+  KWD: 'Dinar koweïtien',
+  KYD: 'Dollar des îles Caïmans',
+  KZT: 'Tenge kazakh',
+  LAK: 'Kip laotien',
+  LBP: 'Livre libanaise',
+  LKR: 'Roupie srilankaise',
+  LRD: 'Dollar libérien',
+  LSL: 'Loti lesothan',
+  LYD: 'Dinar libyen',
+  MAD: 'Dirham marocain',
+  MDL: 'Leu moldave',
+  MGA: 'Ariary malgache',
+  MKD: 'Denar macédonien',
+  MMK: 'Kyat birman',
+  MNT: 'Tugrik mongol',
+  MOP: 'Pataca macanais',
+  MRU: 'Ouguiya mauritanien',
+  MUR: 'Roupie mauricienne',
+  MVR: 'Rufiyaa maldivien',
+  MWK: 'Kwacha malawite',
+  MXN: 'Peso mexicain',
+  MYR: 'Ringgit malaisien',
+  MZN: 'Metical mozambicain',
+  NAD: 'Dollar namibien',
+  NGN: 'Naira nigérian',
+  NIO: 'Córdoba nicaraguayen',
+  NOK: 'Couronne norvégienne',
+  NPR: 'Roupie népalaise',
+  NZD: 'Dollar néo-zélandais',
+  OMR: 'Rial omanais',
+  PAB: 'Balboa panaméen',
+  PEN: 'Sol péruvien',
+  PGK: 'Kina papou-néo-guinéen',
+  PHP: 'Peso philippin',
+  PKR: 'Roupie pakistanaise',
+  PLN: 'Złoty polonais',
+  PYG: 'Guarani paraguayen',
+  QAR: 'Riyal qatari',
+  RON: 'Leu roumain',
+  RSD: 'Dinar serbe',
+  RUB: 'Rouble russe',
+  RWF: 'Franc rwandais',
+  SAR: 'Riyal saoudien',
+  SBD: 'Dollar des îles Salomon',
+  SCR: 'Roupie seychelloise',
+  SDG: 'Livre soudanaise',
+  SEK: 'Couronne suédoise',
+  SGD: 'Dollar de Singapour',
+  SHP: 'Livre de Sainte-Hélène',
+  SLL: 'Leone sierra-léonais',
+  SOS: 'Shilling somalien',
+  SRD: 'Dollar surinamais',
+  SSP: 'Livre sud-soudanaise',
+  STN: 'Dobra santoméen',
+  SYP: 'Livre syrienne',
+  SZL: 'Lilangeni swazi',
+  THB: 'Baht thaïlandais',
+  TJS: 'Somoni tadjik',
+  TMT: 'Manat turkmène',
+  TND: 'Dinar tunisien',
+  TOP: 'Pa\'anga tongan',
+  TRY: 'Livre turque',
+  TTD: 'Dollar de Trinité-et-Tobago',
+  TVD: 'Dollar tuvaluan',
+  TWD: 'Dollar taïwanais',
+  TZS: 'Shilling tanzanien',
+  UAH: 'Hryvnia ukrainienne',
+  UGX: 'Shilling ougandais',
+  USD: 'Dollar américain',
+  UYU: 'Peso uruguayen',
+  UZS: 'Sum ouzbek',
+  VES: 'Bolívar vénézuélien',
+  VND: 'Dong vietnamien',
+  VUV: 'Vatu vanuatais',
+  WST: 'Tala samoan',
+  XAF: 'Franc CFA d\'Afrique centrale',
+  XCD: 'Dollar des Caraïbes orientales',
+  XDR: 'Droit de tirage spécial',
+  XOF: 'Franc CFA d\'Afrique de l\'Ouest',
+  XPF: 'Franc CFP',
+  YER: 'Rial yéménite',
+  ZAR: 'Rand sud-africain',
+  ZMW: 'Kwacha zambien',
+  ZWL: 'Dollar zimbabwéen'
+};
+
 export default function CurrencyConverter() {
   const [currencyRates, setCurrencyRates] = useState<CurrencyRate[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -21,6 +186,10 @@ export default function CurrencyConverter() {
   const [sourceCurrency, setSourceCurrency] = useState<string>('EUR');
   const [targetCurrency, setTargetCurrency] = useState<string>('USD');
   const [conversionResults, setConversionResults] = useState<ConversionResult[]>([]);
+  const [sourceSearch, setSourceSearch] = useState<string>('');
+  const [targetSearch, setTargetSearch] = useState<string>('');
+  const [isSourceOpen, setIsSourceOpen] = useState(false);
+  const [isTargetOpen, setIsTargetOpen] = useState(false);
 
   useEffect(() => {
     fetchCurrencyRates();
@@ -50,12 +219,26 @@ export default function CurrencyConverter() {
     setInputValues(e.target.value);
   };
 
-  const handleSourceCurrencyChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSourceCurrency(e.target.value);
+  const handleSourceSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSourceSearch(e.target.value);
+    setIsSourceOpen(true);
   };
 
-  const handleTargetCurrencyChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setTargetCurrency(e.target.value);
+  const handleTargetSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTargetSearch(e.target.value);
+    setIsTargetOpen(true);
+  };
+
+  const handleSourceSelect = (currency: string) => {
+    setSourceCurrency(currency);
+    setIsSourceOpen(false);
+    setSourceSearch('');
+  };
+
+  const handleTargetSelect = (currency: string) => {
+    setTargetCurrency(currency);
+    setIsTargetOpen(false);
+    setTargetSearch('');
   };
 
   const convertValues = () => {
@@ -196,6 +379,17 @@ export default function CurrencyConverter() {
     }
   };
 
+  // Filtrer les devises en fonction de la recherche
+  const filteredSourceCurrencies = currencyRates.filter(rate => 
+    rate.currency.toLowerCase().includes(sourceSearch.toLowerCase()) || 
+    (CURRENCY_NAMES[rate.currency] && CURRENCY_NAMES[rate.currency].toLowerCase().includes(sourceSearch.toLowerCase()))
+  );
+
+  const filteredTargetCurrencies = currencyRates.filter(rate => 
+    rate.currency.toLowerCase().includes(targetSearch.toLowerCase()) || 
+    (CURRENCY_NAMES[rate.currency] && CURRENCY_NAMES[rate.currency].toLowerCase().includes(targetSearch.toLowerCase()))
+  );
+
   if (isLoading) {
     return (
       <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg">
@@ -223,34 +417,86 @@ export default function CurrencyConverter() {
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Devise source
             </label>
-            <select
-              value={sourceCurrency}
-              onChange={handleSourceCurrencyChange}
-              className="w-full p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500"
-            >
-              {currencyRates.map((rate) => (
-                <option key={rate.currency} value={rate.currency}>
-                  {rate.currency}
-                </option>
-              ))}
-            </select>
+            <div className="relative">
+              <div 
+                className="w-full p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500 cursor-pointer"
+                onClick={() => setIsSourceOpen(!isSourceOpen)}
+              >
+                <div className="flex justify-between items-center">
+                  <span>{sourceCurrency} - {CURRENCY_NAMES[sourceCurrency] || 'Devise inconnue'}</span>
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+              </div>
+              
+              {isSourceOpen && (
+                <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg">
+                  <input
+                    type="text"
+                    value={sourceSearch}
+                    onChange={handleSourceSearchChange}
+                    placeholder="Rechercher une devise..."
+                    className="w-full p-2 border-b border-gray-300 focus:outline-none"
+                    onClick={(e) => e.stopPropagation()}
+                  />
+                  <div className="max-h-60 overflow-y-auto">
+                    {filteredSourceCurrencies.map((rate) => (
+                      <div
+                        key={rate.currency}
+                        className="p-2 hover:bg-gray-100 cursor-pointer"
+                        onClick={() => handleSourceSelect(rate.currency)}
+                      >
+                        {rate.currency} - {CURRENCY_NAMES[rate.currency] || 'Devise inconnue'}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
           
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Devise cible
             </label>
-            <select
-              value={targetCurrency}
-              onChange={handleTargetCurrencyChange}
-              className="w-full p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500"
-            >
-              {currencyRates.map((rate) => (
-                <option key={rate.currency} value={rate.currency}>
-                  {rate.currency}
-                </option>
-              ))}
-            </select>
+            <div className="relative">
+              <div 
+                className="w-full p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500 cursor-pointer"
+                onClick={() => setIsTargetOpen(!isTargetOpen)}
+              >
+                <div className="flex justify-between items-center">
+                  <span>{targetCurrency} - {CURRENCY_NAMES[targetCurrency] || 'Devise inconnue'}</span>
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+              </div>
+              
+              {isTargetOpen && (
+                <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg">
+                  <input
+                    type="text"
+                    value={targetSearch}
+                    onChange={handleTargetSearchChange}
+                    placeholder="Rechercher une devise..."
+                    className="w-full p-2 border-b border-gray-300 focus:outline-none"
+                    onClick={(e) => e.stopPropagation()}
+                  />
+                  <div className="max-h-60 overflow-y-auto">
+                    {filteredTargetCurrencies.map((rate) => (
+                      <div
+                        key={rate.currency}
+                        className="p-2 hover:bg-gray-100 cursor-pointer"
+                        onClick={() => handleTargetSelect(rate.currency)}
+                      >
+                        {rate.currency} - {CURRENCY_NAMES[rate.currency] || 'Devise inconnue'}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
         

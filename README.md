@@ -1,92 +1,69 @@
-# RatioScan
+# Valora - Convertisseur de devises
 
-Application de mapping des ratios monétaires avec l'API Coupa.
+![Valora Logo](public/logo192.png)
+
+Valora est une application web moderne de conversion de devises qui permet de convertir facilement des montants entre différentes devises en utilisant des taux de change à jour.
 
 ## Fonctionnalités
 
-- Authentification sécurisée
-- Tableau de bord avec vue d'ensemble des ratios
-- Liste détaillée des ratios avec filtrage et recherche
-- Vue détaillée de chaque ratio avec historique
-- Interface responsive et accessible (RGAA)
+- **Conversion simple** : Convertissez rapidement des montants entre différentes devises
+- **Conversion en masse** : Entrez plusieurs valeurs à la fois pour les convertir
+- **Taux de change à jour** : Utilise l'API exchangerate-api.com pour des taux de change en temps réel
+- **Export Excel** : Exportez vos conversions au format Excel (.xlsx)
+- **Interface intuitive** : Design moderne et responsive avec Tailwind CSS
+- **Copie rapide** : Copiez les résultats dans le presse-papiers en un clic
 
 ## Technologies utilisées
 
-- React avec TypeScript
-- Vite pour le build
-- Tailwind CSS pour le style
-- React Router pour la navigation
-- Axios pour les appels API
-
-## Prérequis
-
-- Node.js (v16 ou supérieur)
-- npm ou yarn
+- **Frontend** : React, TypeScript, Vite
+- **Styling** : Tailwind CSS
+- **Traitement Excel** : ExcelJS
+- **API** : exchangerate-api.com pour les taux de change
 
 ## Installation
 
-1. Cloner le repository :
-```bash
-git clone https://github.com/votre-username/ratio-scan.git
-cd ratio-scan
-```
+1. Clonez le dépôt :
+   ```bash
+   git clone https://github.com/anais0210/valora.git
+   cd valora
+   ```
 
-2. Installer les dépendances :
-```bash
-npm install
-```
+2. Installez les dépendances :
+   ```bash
+   npm install
+   # ou
+   pnpm install
+   ```
 
-3. Créer un fichier `.env` à la racine du projet :
-```env
-VITE_API_URL=https://compass.coupa.com/fr-fr/api
-```
+3. Lancez l'application en mode développement :
+   ```bash
+   npm run dev
+   # ou
+   pnpm dev
+   ```
 
-4. Lancer l'application en mode développement :
-```bash
-npm run dev
-```
+4. Ouvrez votre navigateur à l'adresse [http://localhost:5173](http://localhost:5173)
 
-## Structure du projet
+## Utilisation
 
-```
-src/
-  ├── components/     # Composants réutilisables
-  ├── contexts/       # Contextes React (auth, etc.)
-  ├── pages/          # Pages de l'application
-  ├── services/       # Services (API, etc.)
-  ├── App.tsx         # Composant principal
-  └── main.tsx        # Point d'entrée
-```
+1. **Conversion simple** :
+   - Entrez une ou plusieurs valeurs dans la zone de texte (séparées par des retours à la ligne, des virgules ou des points-virgules)
+   - Sélectionnez la devise source (par exemple EUR)
+   - Sélectionnez la devise cible (par exemple USD)
+   - Cliquez sur "Convertir"
 
-## Accessibilité
+2. **Export des résultats** :
+   - Après la conversion, vous pouvez copier les résultats en cliquant sur "Copier les résultats"
+   - Vous pouvez également exporter les résultats au format Excel en cliquant sur "Exporter en Excel"
 
-L'application est conçue pour être accessible selon les critères RGAA 4.1 :
-
-- Structure sémantique HTML5
-- Contraste des couleurs respecté
-- Navigation au clavier
-- Messages d'erreur clairs
-- Labels explicites pour les formulaires
-- Support des lecteurs d'écran
-
-## Déploiement
-
-Pour construire l'application pour la production :
-
-```bash
-npm run build
-```
-
-Les fichiers générés seront dans le dossier `dist/`.
-
-## Contribution
-
-1. Fork le projet
-2. Créer une branche pour votre fonctionnalité
-3. Commiter vos changements
-4. Pousser vers la branche
-5. Ouvrir une Pull Request
+3. **Fichier Excel exporté** :
+   - Le fichier Excel contient deux feuilles :
+     - "Conversions de devises" : Toutes les conversions avec les valeurs d'origine, les valeurs converties et les taux de change
+     - "Informations" : Métadonnées sur la conversion (date, devises, nombre de conversions)
 
 ## Licence
 
-MIT 
+
+## Contact
+
+Pour toute question ou suggestion, n'hésitez pas à ouvrir une issue sur GitHub. 

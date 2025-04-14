@@ -130,7 +130,6 @@ export default function ExcelConverter() {
       }
 
       const data: ExcelData[] = [];
-      let rowNumber = 0;
       
       worksheet.eachRow((row, rowNumber) => {
         if (rowNumber === 1) return; // Skip header row

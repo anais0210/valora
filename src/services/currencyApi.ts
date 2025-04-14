@@ -8,18 +8,7 @@ export interface CurrencyRate {
 }
 
 // Devises par défaut en cas d'erreur de l'API
-const DEFAULT_RATES: CurrencyRate[] = [
-  { code: 'USD', rate: 1.08 },
-  { code: 'GBP', rate: 0.86 },
-  { code: 'JPY', rate: 161.23 },
-  { code: 'CHF', rate: 0.96 },
-  { code: 'CAD', rate: 1.47 },
-  { code: 'AUD', rate: 1.65 },
-  { code: 'CNY', rate: 7.78 },
-  { code: 'INR', rate: 89.45 },
-  { code: 'BRL', rate: 5.34 },
-  { code: 'RUB', rate: 98.56 }
-];
+// const DEFAULT_RATES: CurrencyRate[] = [];
 
 export const currencyApi = {
   getAllRates: async (): Promise<CurrencyRate[]> => {

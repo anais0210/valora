@@ -1,15 +1,18 @@
 import React from 'react';
-import { useConverterStore } from '../store';
-import { format } from 'date-fns';
-import { fr } from 'date-fns/locale';
+import { useConversionHistory } from '../hooks/useConversionHistory';
 
 export const ConversionHistory: React.FC = () => {
-  const conversions = useConverterStore((state) => state.conversions);
+  const { conversions } = useConversionHistory();
 
   if (conversions.length === 0) {
     return (
-      <div className="text-center text-gray-500 p-6 bg-surface-light rounded-lg border-2 border-primary-100">
-        Aucune conversion dans l'historique
+      <div className="bg-surface-light rounded-lg shadow-lg border-2 border-primary-200 overflow-hidden">
+        <div className="bg-gradient-to-r from-primary-500 to-primary-600 p-4">
+          <h2 className="text-lg font-bold text-white">Historique des Conversions</h2>
+        </div>
+        <div className="p-4 text-center text-gray-500">
+          Aucune conversion dans l'historique
+        </div>
       </div>
     );
   }
@@ -17,36 +20,36 @@ export const ConversionHistory: React.FC = () => {
   return (
     <div className="bg-surface-light rounded-lg shadow-lg border-2 border-primary-200 overflow-hidden">
       <div className="bg-gradient-to-r from-primary-500 to-primary-600 p-4">
-        <h2 className="text-lg font-bold text-white">Historique des conversions</h2>
+        <h2 className="text-lg font-bold text-white">Historique des Conversions</h2>
       </div>
       
-      <div className="p-4">
-        <div className="space-y-3 max-h-[300px] overflow-y-auto">
-          {conversions.map((conversion, index) => (
-            <div
-              key={index}
-              className="bg-gradient-to-r from-surface-light to-surface p-4 rounded-lg border-2 border-primary-100 hover:border-primary-300 transition-all duration-200"
-            >
-              <div className="flex flex-col space-y-2">
-                <div className="flex items-center justify-between flex-wrap gap-2">
-                  <div className="flex items-center space-x-2">
-                    <span className="font-bold text-primary-600">{conversion.amount}</span>
-                    <span className="text-primary-700">{conversion.from}</span>
-                    <span className="text-primary-400">→</span>
-                    <span className="font-bold text-primary-600">{conversion.result}</span>
-                    <span className="text-primary-700">{conversion.to}</span>
-                  </div>
-                  <div className="text-sm text-primary-400">
-                    {format(conversion.timestamp, 'PPp', { locale: fr })}
-                  </div>
-                </div>
-                <div className="text-sm text-primary-500 bg-primary-50 rounded-md px-3 py-1 inline-block">
-                  Taux: 1 {conversion.from} = {conversion.rate} {conversion.to}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+      <div className="overflow-x-auto">
+        <table className="w-full">
+          <thead className="bg-primary-50">
+            <tr>
+              <th className="px-4 py-3 text-left text-sm font-semibold text-primary-700">De</th>
+              <th className="px-4 py-3 text-left text-sm font-semibold text-primary-700">Vers</th>
+              <th className="px-4 py-3 text-left text-sm font-semibold text-primary-700">Montant</th>
+              <th className="px-4 py-3 text-left text-sm font-semibold text-primary-700">Résultat</th>
+              <th className="px-4 py-3 text-left text-sm font-semibold text-primary-700">Taux</th>
+              <th className="px-4 py-3 text-left text-sm font-semibold text-primary-700">Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {conversions.map((conversion, index) => (
+              <tr key={index} className="hover:bg-primary-50 transition-colors duration-200">
+                <td className="px-4 py-3 text-primary-700">{conversion.from}</td>
+                <td className="px-4 py-3 text-primary-700">{conversion.to}</td>
+                <td className="px-4 py-3 text-primary-700">{conversion.amount.toFixed(2)}</td>
+                <td className="px-4 py-3 font-medium text-primary-700">{conversion.result.toFixed(2)}</td>
+                <td className="px-4 py-3 text-primary-600">{conversion.rate.toFixed(4)}</td>
+                <td className="px-4 py-3 text-primary-600">
+                  {new Date(conversion.timestamp).toLocaleString('fr-FR')}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );

@@ -2,7 +2,7 @@
 
 ![Valora Logo](public/logo192.png)
 
-Valora est une application web moderne de conversion de devises qui permet de convertir facilement des montants entre différentes devises en utilisant des taux de change à jour.
+Valora est une application de conversion de devises qui permet de convertir facilement des montants entre différentes devises en utilisant des taux de change à jour.
 
 ## Fonctionnalités
 

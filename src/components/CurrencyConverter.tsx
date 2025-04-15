@@ -13,7 +13,6 @@ interface ConversionResult {
   targetCurrency: string;
 }
 
-// Noms complets des devises
 const CURRENCY_NAMES: Record<string, string> = {
   AED: 'Dirham des Émirats arabes unis',
   AFN: 'Afghani afghan',
@@ -190,6 +189,7 @@ export default function CurrencyConverter() {
   const [targetSearch, setTargetSearch] = useState<string>('');
   const [isSourceOpen, setIsSourceOpen] = useState(false);
   const [isTargetOpen, setIsTargetOpen] = useState(false);
+  const [warnings, setWarnings] = useState<string[]>([]);
 
   useEffect(() => {
     fetchCurrencyRates();
@@ -216,7 +216,20 @@ export default function CurrencyConverter() {
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setInputValues(e.target.value);
+    const newValue = e.target.value;
+    setInputValues(newValue);
+    
+    const lines = newValue.split(/[\n,;]/);
+    const newWarnings: string[] = [];
+    
+    lines.forEach((line, index) => {
+      const trimmedLine = line.trim();
+      if (trimmedLine && isNaN(Number(trimmedLine))) {
+        newWarnings.push(`Ligne ${index + 1}: "${trimmedLine}" n'est pas un nombre valide`);
+      }
+    });
+    
+    setWarnings(newWarnings);
   };
 
   const handleSourceSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -247,9 +260,8 @@ export default function CurrencyConverter() {
       return;
     }
 
-    // Extraire les valeurs numériques du texte
     const values = inputValues
-      .split(/[\n,;]/) // Séparer par retour à la ligne, virgule ou point-virgule
+      .split(/[\n,;]/)
       .map(v => v.trim())
       .filter(v => v !== '')
       .map(v => parseFloat(v))
@@ -260,11 +272,9 @@ export default function CurrencyConverter() {
       return;
     }
 
-    // Trouver les taux de change
     const sourceRate = currencyRates.find(r => r.currency === sourceCurrency)?.rate || 1;
     const targetRate = currencyRates.find(r => r.currency === targetCurrency)?.rate || 1;
 
-    // Calculer les conversions
     const results = values.map(value => {
       const convertedValue = value * (targetRate / sourceRate);
       return {
@@ -296,17 +306,14 @@ export default function CurrencyConverter() {
     }
 
     try {
-      // Créer un nouveau classeur Excel
       const workbook = new ExcelJS.Workbook();
       workbook.creator = 'Valora';
       workbook.lastModifiedBy = 'Valora';
       workbook.created = new Date();
       workbook.modified = new Date();
 
-      // Ajouter une feuille de calcul
       const worksheet = workbook.addWorksheet('Conversions de devises');
       
-      // Définir les colonnes
       worksheet.columns = [
         { header: 'Valeur d\'origine', key: 'originalValue', width: 15 },
         { header: 'Devise d\'origine', key: 'originalCurrency', width: 15 },
@@ -315,7 +322,6 @@ export default function CurrencyConverter() {
         { header: 'Taux de change', key: 'rate', width: 15 }
       ];
 
-      // Ajouter les données
       conversionResults.forEach(result => {
         const rate = result.convertedValue / result.originalValue;
         worksheet.addRow({
@@ -327,7 +333,6 @@ export default function CurrencyConverter() {
         });
       });
 
-      // Formater les en-têtes
       worksheet.getRow(1).font = { bold: true };
       worksheet.getRow(1).fill = {
         type: 'pattern',
@@ -335,12 +340,10 @@ export default function CurrencyConverter() {
         fgColor: { argb: 'FFE0E0E0' }
       };
 
-      // Formater les cellules numériques
       worksheet.getColumn('originalValue').numFmt = '#,##0.00';
       worksheet.getColumn('convertedValue').numFmt = '#,##0.00';
       worksheet.getColumn('rate').numFmt = '#,##0.0000';
 
-      // Ajouter une feuille d'informations
       const infoSheet = workbook.addWorksheet('Informations');
       infoSheet.columns = [
         { header: 'Information', key: 'info', width: 30 },
@@ -352,7 +355,6 @@ export default function CurrencyConverter() {
       infoSheet.addRow({ info: 'Devise cible', value: targetCurrency });
       infoSheet.addRow({ info: 'Nombre de conversions', value: conversionResults.length });
 
-      // Formater les en-têtes de la feuille d'informations
       infoSheet.getRow(1).font = { bold: true };
       infoSheet.getRow(1).fill = {
         type: 'pattern',
@@ -360,10 +362,8 @@ export default function CurrencyConverter() {
         fgColor: { argb: 'FFE0E0E0' }
       };
 
-      // Générer le fichier Excel
       const buffer = await workbook.xlsx.writeBuffer();
       
-      // Créer un blob et télécharger le fichier
       const blob = new Blob([buffer], { 
         type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' 
       });
@@ -379,7 +379,6 @@ export default function CurrencyConverter() {
     }
   };
 
-  // Filtrer les devises en fonction de la recherche
   const filteredSourceCurrencies = currencyRates.filter(rate => 
     rate.currency.toLowerCase().includes(sourceSearch.toLowerCase()) || 
     (CURRENCY_NAMES[rate.currency] && CURRENCY_NAMES[rate.currency].toLowerCase().includes(sourceSearch.toLowerCase()))
@@ -408,6 +407,17 @@ export default function CurrencyConverter() {
       {error && (
         <div className="mb-4 p-4 bg-red-100 text-red-700 rounded">
           {error}
+        </div>
+      )}
+      
+      {warnings.length > 0 && (
+        <div className="mb-4 p-4 bg-yellow-100 text-yellow-700 rounded">
+          <h3 className="font-medium mb-2">Avertissements :</h3>
+          <ul className="list-disc pl-5">
+            {warnings.map((warning, index) => (
+              <li key={index}>{warning}</li>
+            ))}
+          </ul>
         </div>
       )}
       
@@ -508,8 +518,15 @@ export default function CurrencyConverter() {
             value={inputValues}
             onChange={handleInputChange}
             placeholder="Entrez vos valeurs ici, par exemple: 100&#10;200&#10;300"
-            className="w-full p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500 h-32"
+            className={`w-full p-2 border rounded focus:ring-blue-500 focus:border-blue-500 h-32 ${
+              warnings.length > 0 ? 'border-yellow-500' : 'border-gray-300'
+            }`}
           />
+          {warnings.length > 0 && (
+            <p className="mt-1 text-sm text-yellow-600">
+              Seules les valeurs numériques seront converties
+            </p>
+          )}
         </div>
         
         <div className="flex justify-center">

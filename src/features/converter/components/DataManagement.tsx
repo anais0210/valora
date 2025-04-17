@@ -14,15 +14,11 @@ interface DataManagementProps {
 export const DataManagement: React.FC<DataManagementProps> = ({
   currentConversion,
   currentMultipleConversions = [],
-  conversionMode
+  conversionMode,
 }) => {
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  
-  const conversions = useConverterStore((state) => state.conversions);
-  const favorites = useConverterStore((state) => state.favorites);
-  const addConversion = useConverterStore((state) => state.addConversion);
-  const addFavorite = useConverterStore((state) => state.addFavorite);
+  const { addConversion, addFavorite } = useConverterStore();
 
   const getCurrentConversions = () => {
     if (conversionMode === 'single') {
@@ -51,16 +47,18 @@ export const DataManagement: React.FC<DataManagementProps> = ({
         Montant: conv.amount,
         Résultat: conv.result,
         Taux: conv.rate,
-        Date: new Date(conv.timestamp).toLocaleString('fr-FR')
+        Date: new Date(conv.timestamp).toLocaleString('fr-FR'),
       }))
     );
 
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Conversions');
-    
+
     // Générer le fichier Excel
     const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-    const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    const blob = new Blob([excelBuffer], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    });
     saveAs(blob, 'conversions_courantes.xlsx');
   };
 
@@ -70,20 +68,20 @@ export const DataManagement: React.FC<DataManagementProps> = ({
 
     try {
       const data = await ExportService.importFromJSON(file);
-      
+
       // Ajouter les conversions importées
-      data.conversions.forEach((conversion) => {
+      data.conversions.forEach(conversion => {
         addConversion(conversion);
       });
 
       // Ajouter les favoris importés
-      data.favorites.forEach((favorite) => {
+      data.favorites.forEach(favorite => {
         addFavorite(favorite);
       });
 
       setError(null);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erreur lors de l\'import');
+      setError(err instanceof Error ? err.message : "Erreur lors de l'import");
     }
 
     // Réinitialiser l'input file
@@ -104,16 +102,16 @@ export const DataManagement: React.FC<DataManagementProps> = ({
 
   return (
     <div className="bg-surface-light rounded-lg shadow-md border border-gray-200 p-4">
-      <h2 className="text-lg font-semibold text-primary-700 mb-4">Exporter la conversion en cours</h2>
-      
-      <div className="flex flex-wrap gap-4">
+      <h2 className="text-lg font-semibold text-primary-700 mb-4">Gestion des données</h2>
+
+      <div className="flex flex-wrap gap-4 mb-4">
         <button
           onClick={handleExportJSON}
           className="flex-1 py-2 px-4 bg-primary-600 hover:bg-primary-700 text-white rounded-lg shadow transition-colors duration-200"
         >
           Exporter en JSON
         </button>
-        
+
         <button
           onClick={handleExportExcel}
           className="flex-1 py-2 px-4 bg-accent-600 hover:bg-accent-700 text-white rounded-lg shadow transition-colors duration-200"
@@ -121,6 +119,30 @@ export const DataManagement: React.FC<DataManagementProps> = ({
           Exporter en Excel
         </button>
       </div>
+
+      <div className="mt-4">
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          Importer des données
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleImport}
+            accept=".json"
+            className="mt-1 block w-full text-sm text-gray-500
+              file:mr-4 file:py-2 file:px-4
+              file:rounded-lg file:border-0
+              file:text-sm file:font-semibold
+              file:bg-primary-50 file:text-primary-700
+              hover:file:bg-primary-100
+              focus:outline-none focus:ring-2 focus:ring-primary-500"
+          />
+        </label>
+        {error && (
+          <p className="mt-2 text-sm text-red-600 bg-red-50 p-2 rounded border border-red-200">
+            {error}
+          </p>
+        )}
+      </div>
     </div>
   );
-}; 
+};

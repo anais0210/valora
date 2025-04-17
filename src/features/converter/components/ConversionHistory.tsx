@@ -10,9 +10,7 @@ export const ConversionHistory: React.FC = () => {
         <div className="bg-gradient-to-r from-primary-500 to-primary-600 p-4">
           <h2 className="text-lg font-bold text-white">Historique des Conversions</h2>
         </div>
-        <div className="p-4 text-center text-gray-500">
-          Aucune conversion dans l'historique
-        </div>
+        <div className="p-4 text-center text-gray-500">Aucune conversion dans l'historique</div>
       </div>
     );
   }
@@ -22,15 +20,19 @@ export const ConversionHistory: React.FC = () => {
       <div className="bg-gradient-to-r from-primary-500 to-primary-600 p-4">
         <h2 className="text-lg font-bold text-white">Historique des Conversions</h2>
       </div>
-      
+
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead className="bg-primary-50">
             <tr>
               <th className="px-4 py-3 text-left text-sm font-semibold text-primary-700">De</th>
               <th className="px-4 py-3 text-left text-sm font-semibold text-primary-700">Vers</th>
-              <th className="px-4 py-3 text-left text-sm font-semibold text-primary-700">Montant</th>
-              <th className="px-4 py-3 text-left text-sm font-semibold text-primary-700">Résultat</th>
+              <th className="px-4 py-3 text-left text-sm font-semibold text-primary-700">
+                Montant
+              </th>
+              <th className="px-4 py-3 text-left text-sm font-semibold text-primary-700">
+                Résultat
+              </th>
               <th className="px-4 py-3 text-left text-sm font-semibold text-primary-700">Taux</th>
               <th className="px-4 py-3 text-left text-sm font-semibold text-primary-700">Date</th>
             </tr>
@@ -41,7 +43,9 @@ export const ConversionHistory: React.FC = () => {
                 <td className="px-4 py-3 text-primary-700">{conversion.from}</td>
                 <td className="px-4 py-3 text-primary-700">{conversion.to}</td>
                 <td className="px-4 py-3 text-primary-700">{conversion.amount.toFixed(2)}</td>
-                <td className="px-4 py-3 font-medium text-primary-700">{conversion.result.toFixed(2)}</td>
+                <td className="px-4 py-3 font-medium text-primary-700">
+                  {conversion.result.toFixed(2)}
+                </td>
                 <td className="px-4 py-3 text-primary-600">{conversion.rate.toFixed(4)}</td>
                 <td className="px-4 py-3 text-primary-600">
                   {new Date(conversion.timestamp).toLocaleString('fr-FR')}
@@ -53,4 +57,4 @@ export const ConversionHistory: React.FC = () => {
       </div>
     </div>
   );
-}; 
+};

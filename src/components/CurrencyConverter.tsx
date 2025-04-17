@@ -76,7 +76,7 @@ const CURRENCY_NAMES: Record<string, string> = {
   HUF: 'Forint hongrois',
   IDR: 'Roupie indonésienne',
   ILS: 'Shekel israélien',
-  IMP: 'Livre de l\'île de Man',
+  IMP: "Livre de l'île de Man",
   INR: 'Roupie indienne',
   IQD: 'Dinar irakien',
   IRR: 'Rial iranien',
@@ -151,7 +151,7 @@ const CURRENCY_NAMES: Record<string, string> = {
   TJS: 'Somoni tadjik',
   TMT: 'Manat turkmène',
   TND: 'Dinar tunisien',
-  TOP: 'Pa\'anga tongan',
+  TOP: "Pa'anga tongan",
   TRY: 'Livre turque',
   TTD: 'Dollar de Trinité-et-Tobago',
   TVD: 'Dollar tuvaluan',
@@ -166,15 +166,15 @@ const CURRENCY_NAMES: Record<string, string> = {
   VND: 'Dong vietnamien',
   VUV: 'Vatu vanuatais',
   WST: 'Tala samoan',
-  XAF: 'Franc CFA d\'Afrique centrale',
+  XAF: "Franc CFA d'Afrique centrale",
   XCD: 'Dollar des Caraïbes orientales',
   XDR: 'Droit de tirage spécial',
-  XOF: 'Franc CFA d\'Afrique de l\'Ouest',
+  XOF: "Franc CFA d'Afrique de l'Ouest",
   XPF: 'Franc CFP',
   YER: 'Rial yéménite',
   ZAR: 'Rand sud-africain',
   ZMW: 'Kwacha zambien',
-  ZWL: 'Dollar zimbabwéen'
+  ZWL: 'Dollar zimbabwéen',
 };
 
 export default function CurrencyConverter() {
@@ -198,7 +198,7 @@ export default function CurrencyConverter() {
   const fetchCurrencyRates = async () => {
     setIsLoading(true);
     setError(null);
-    
+
     try {
       const response = await fetch('https://api.exchangerate-api.com/v4/latest/EUR');
       const data = await response.json();
@@ -218,17 +218,17 @@ export default function CurrencyConverter() {
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newValue = e.target.value;
     setInputValues(newValue);
-    
+
     const lines = newValue.split(/[\n,;]/);
     const newWarnings: string[] = [];
-    
+
     lines.forEach((line, index) => {
       const trimmedLine = line.trim();
       if (trimmedLine && isNaN(Number(trimmedLine))) {
         newWarnings.push(`Ligne ${index + 1}: "${trimmedLine}" n'est pas un nombre valide`);
       }
     });
-    
+
     setWarnings(newWarnings);
   };
 
@@ -281,7 +281,7 @@ export default function CurrencyConverter() {
         originalValue: value,
         originalCurrency: sourceCurrency,
         convertedValue,
-        targetCurrency
+        targetCurrency,
       };
     });
 
@@ -290,7 +290,8 @@ export default function CurrencyConverter() {
   };
 
   const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text)
+    navigator.clipboard
+      .writeText(text)
       .then(() => {
         alert('Copié dans le presse-papiers !');
       })
@@ -313,13 +314,13 @@ export default function CurrencyConverter() {
       workbook.modified = new Date();
 
       const worksheet = workbook.addWorksheet('Conversions de devises');
-      
+
       worksheet.columns = [
-        { header: 'Valeur d\'origine', key: 'originalValue', width: 15 },
-        { header: 'Devise d\'origine', key: 'originalCurrency', width: 15 },
+        { header: "Valeur d'origine", key: 'originalValue', width: 15 },
+        { header: "Devise d'origine", key: 'originalCurrency', width: 15 },
         { header: 'Valeur convertie', key: 'convertedValue', width: 15 },
         { header: 'Devise cible', key: 'targetCurrency', width: 15 },
-        { header: 'Taux de change', key: 'rate', width: 15 }
+        { header: 'Taux de change', key: 'rate', width: 15 },
       ];
 
       conversionResults.forEach(result => {
@@ -329,7 +330,7 @@ export default function CurrencyConverter() {
           originalCurrency: result.originalCurrency,
           convertedValue: result.convertedValue,
           targetCurrency: result.targetCurrency,
-          rate: rate
+          rate: rate,
         });
       });
 
@@ -337,7 +338,7 @@ export default function CurrencyConverter() {
       worksheet.getRow(1).fill = {
         type: 'pattern',
         pattern: 'solid',
-        fgColor: { argb: 'FFE0E0E0' }
+        fgColor: { argb: 'FFE0E0E0' },
       };
 
       worksheet.getColumn('originalValue').numFmt = '#,##0.00';
@@ -347,7 +348,7 @@ export default function CurrencyConverter() {
       const infoSheet = workbook.addWorksheet('Informations');
       infoSheet.columns = [
         { header: 'Information', key: 'info', width: 30 },
-        { header: 'Valeur', key: 'value', width: 30 }
+        { header: 'Valeur', key: 'value', width: 30 },
       ];
 
       infoSheet.addRow({ info: 'Date de conversion', value: new Date().toLocaleString() });
@@ -359,13 +360,13 @@ export default function CurrencyConverter() {
       infoSheet.getRow(1).fill = {
         type: 'pattern',
         pattern: 'solid',
-        fgColor: { argb: 'FFE0E0E0' }
+        fgColor: { argb: 'FFE0E0E0' },
       };
 
       const buffer = await workbook.xlsx.writeBuffer();
-      
-      const blob = new Blob([buffer], { 
-        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' 
+
+      const blob = new Blob([buffer], {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
       });
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -374,19 +375,23 @@ export default function CurrencyConverter() {
       a.click();
       window.URL.revokeObjectURL(url);
     } catch (err) {
-      console.error('Erreur lors de l\'export Excel:', err);
-      setError('Erreur lors de l\'export Excel. Veuillez réessayer.');
+      console.error("Erreur lors de l'export Excel:", err);
+      setError("Erreur lors de l'export Excel. Veuillez réessayer.");
     }
   };
 
-  const filteredSourceCurrencies = currencyRates.filter(rate => 
-    rate.currency.toLowerCase().includes(sourceSearch.toLowerCase()) || 
-    (CURRENCY_NAMES[rate.currency] && CURRENCY_NAMES[rate.currency].toLowerCase().includes(sourceSearch.toLowerCase()))
+  const filteredSourceCurrencies = currencyRates.filter(
+    rate =>
+      rate.currency.toLowerCase().includes(sourceSearch.toLowerCase()) ||
+      (CURRENCY_NAMES[rate.currency] &&
+        CURRENCY_NAMES[rate.currency].toLowerCase().includes(sourceSearch.toLowerCase()))
   );
 
-  const filteredTargetCurrencies = currencyRates.filter(rate => 
-    rate.currency.toLowerCase().includes(targetSearch.toLowerCase()) || 
-    (CURRENCY_NAMES[rate.currency] && CURRENCY_NAMES[rate.currency].toLowerCase().includes(targetSearch.toLowerCase()))
+  const filteredTargetCurrencies = currencyRates.filter(
+    rate =>
+      rate.currency.toLowerCase().includes(targetSearch.toLowerCase()) ||
+      (CURRENCY_NAMES[rate.currency] &&
+        CURRENCY_NAMES[rate.currency].toLowerCase().includes(targetSearch.toLowerCase()))
   );
 
   if (isLoading) {
@@ -403,13 +408,9 @@ export default function CurrencyConverter() {
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
       <h2 className="text-2xl font-bold mb-6 text-center">Convertisseur de devises</h2>
-      
-      {error && (
-        <div className="mb-4 p-4 bg-red-100 text-red-700 rounded">
-          {error}
-        </div>
-      )}
-      
+
+      {error && <div className="mb-4 p-4 bg-red-100 text-red-700 rounded">{error}</div>}
+
       {warnings.length > 0 && (
         <div className="mb-4 p-4 bg-yellow-100 text-yellow-700 rounded">
           <h3 className="font-medium mb-2">Avertissements :</h3>
@@ -420,26 +421,31 @@ export default function CurrencyConverter() {
           </ul>
         </div>
       )}
-      
+
       <div className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Devise source
-            </label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Devise source</label>
             <div className="relative">
-              <div 
+              <div
                 className="w-full p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500 cursor-pointer"
                 onClick={() => setIsSourceOpen(!isSourceOpen)}
               >
                 <div className="flex justify-between items-center">
-                  <span>{sourceCurrency} - {CURRENCY_NAMES[sourceCurrency] || 'Devise inconnue'}</span>
+                  <span>
+                    {sourceCurrency} - {CURRENCY_NAMES[sourceCurrency] || 'Devise inconnue'}
+                  </span>
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
                   </svg>
                 </div>
               </div>
-              
+
               {isSourceOpen && (
                 <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg">
                   <input
@@ -448,10 +454,10 @@ export default function CurrencyConverter() {
                     onChange={handleSourceSearchChange}
                     placeholder="Rechercher une devise..."
                     className="w-full p-2 border-b border-gray-300 focus:outline-none"
-                    onClick={(e) => e.stopPropagation()}
+                    onClick={e => e.stopPropagation()}
                   />
                   <div className="max-h-60 overflow-y-auto">
-                    {filteredSourceCurrencies.map((rate) => (
+                    {filteredSourceCurrencies.map(rate => (
                       <div
                         key={rate.currency}
                         className="p-2 hover:bg-gray-100 cursor-pointer"
@@ -465,24 +471,29 @@ export default function CurrencyConverter() {
               )}
             </div>
           </div>
-          
+
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Devise cible
-            </label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Devise cible</label>
             <div className="relative">
-              <div 
+              <div
                 className="w-full p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500 cursor-pointer"
                 onClick={() => setIsTargetOpen(!isTargetOpen)}
               >
                 <div className="flex justify-between items-center">
-                  <span>{targetCurrency} - {CURRENCY_NAMES[targetCurrency] || 'Devise inconnue'}</span>
+                  <span>
+                    {targetCurrency} - {CURRENCY_NAMES[targetCurrency] || 'Devise inconnue'}
+                  </span>
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
                   </svg>
                 </div>
               </div>
-              
+
               {isTargetOpen && (
                 <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg">
                   <input
@@ -491,10 +502,10 @@ export default function CurrencyConverter() {
                     onChange={handleTargetSearchChange}
                     placeholder="Rechercher une devise..."
                     className="w-full p-2 border-b border-gray-300 focus:outline-none"
-                    onClick={(e) => e.stopPropagation()}
+                    onClick={e => e.stopPropagation()}
                   />
                   <div className="max-h-60 overflow-y-auto">
-                    {filteredTargetCurrencies.map((rate) => (
+                    {filteredTargetCurrencies.map(rate => (
                       <div
                         key={rate.currency}
                         className="p-2 hover:bg-gray-100 cursor-pointer"
@@ -509,7 +520,7 @@ export default function CurrencyConverter() {
             </div>
           </div>
         </div>
-        
+
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Valeurs à convertir (une par ligne, séparées par des virgules ou des points-virgules)
@@ -528,7 +539,7 @@ export default function CurrencyConverter() {
             </p>
           )}
         </div>
-        
+
         <div className="flex justify-center">
           <button
             onClick={convertValues}
@@ -537,7 +548,7 @@ export default function CurrencyConverter() {
             Convertir
           </button>
         </div>
-        
+
         {conversionResults.length > 0 && (
           <div className="mt-6">
             <h3 className="text-lg font-medium mb-2">Résultats</h3>
@@ -567,14 +578,19 @@ export default function CurrencyConverter() {
                 </tbody>
               </table>
             </div>
-            
+
             <div className="mt-4 flex justify-end space-x-2">
               <button
-                onClick={() => copyToClipboard(
-                  conversionResults
-                    .map(r => `${r.originalValue.toFixed(2)} ${r.originalCurrency} = ${r.convertedValue.toFixed(2)} ${r.targetCurrency}`)
-                    .join('\n')
-                )}
+                onClick={() =>
+                  copyToClipboard(
+                    conversionResults
+                      .map(
+                        r =>
+                          `${r.originalValue.toFixed(2)} ${r.originalCurrency} = ${r.convertedValue.toFixed(2)} ${r.targetCurrency}`
+                      )
+                      .join('\n')
+                  )
+                }
                 className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
               >
                 Copier les résultats
@@ -591,4 +607,4 @@ export default function CurrencyConverter() {
       </div>
     </div>
   );
-} 
+}

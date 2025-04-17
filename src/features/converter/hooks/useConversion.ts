@@ -1,11 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useConverterStore } from '../store';
-import { Conversion } from '../types';
-import { ConverterService } from '../services/converterService';
-import { useConversionHistory } from './useConversionHistory';
 
 export const useConversion = () => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const {
@@ -17,10 +14,8 @@ export const useConversion = () => {
     updateCurrencies,
     updateCurrentConversion,
     updateExchangeRate,
-    addConversion
+    addConversion,
   } = useConverterStore();
-
-  const converterService = ConverterService.getInstance(settings);
 
   useEffect(() => {
     const defaultRate = 1.2;
@@ -31,12 +26,12 @@ export const useConversion = () => {
       const updatedConversion = {
         ...currentConversion,
         rate: defaultRate,
-        result: newResult
+        result: newResult,
       };
       updateCurrentConversion(updatedConversion);
       addConversion(updatedConversion);
     }
-  }, []);
+  }, [currentConversion, updateExchangeRate, updateCurrentConversion, addConversion]);
 
   const handleAmountChange = (amount: number) => {
     if (!isNaN(amount)) {
@@ -46,7 +41,7 @@ export const useConversion = () => {
         amount,
         rate: exchangeRate,
         timestamp: Date.now(),
-        result: amount * exchangeRate
+        result: amount * exchangeRate,
       };
       updateCurrentConversion(conversion);
       addConversion(conversion);
@@ -73,6 +68,6 @@ export const useConversion = () => {
     handleAmountChange,
     handleCurrencyChange,
     handleReset,
-    setError
+    setError,
   };
-}; 
+};

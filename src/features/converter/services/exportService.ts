@@ -35,12 +35,12 @@ export class ExportService {
 
     // Préparer les données des conversions
     const conversionsData = conversions.map(conv => ({
-      'Date': new Date(conv.timestamp).toLocaleString('fr-FR'),
-      'De': conv.from,
-      'Vers': conv.to,
-      'Montant': conv.amount,
-      'Résultat': conv.result,
-      'Taux': conv.rate
+      Date: new Date(conv.timestamp).toLocaleString('fr-FR'),
+      De: conv.from,
+      Vers: conv.to,
+      Montant: conv.amount,
+      Résultat: conv.result,
+      Taux: conv.rate,
     }));
 
     // Créer une feuille pour les conversions
@@ -49,8 +49,8 @@ export class ExportService {
 
     // Préparer les données des favoris
     const favoritesData = favorites.map(fav => ({
-      'De': fav.from,
-      'Vers': fav.to
+      De: fav.from,
+      Vers: fav.to,
     }));
 
     // Créer une feuille pour les favoris
@@ -64,7 +64,7 @@ export class ExportService {
   static importFromJSON(file: File): Promise<ExportData> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
-      reader.onload = (event) => {
+      reader.onload = event => {
         try {
           const data = JSON.parse(event.target?.result as string) as ExportData;
           resolve(data);
@@ -76,4 +76,4 @@ export class ExportService {
       reader.readAsText(file);
     });
   }
-} 
+}

@@ -17,14 +17,9 @@ export class ConverterService {
     return ConverterService.instance;
   }
 
-  async convert(
-    from: string,
-    to: string,
-    amount: number,
-    rate: number
-  ): Promise<Conversion> {
+  async convert(from: string, to: string, amount: number, rate: number): Promise<Conversion> {
     const result = this.round(amount * rate);
-    
+
     const conversion: Conversion = {
       from,
       to,
@@ -43,13 +38,10 @@ export class ConverterService {
   }
 
   isCacheValid(): boolean {
-    return (
-      !this.settings.isOfflineMode &&
-      Date.now() - this.settings.lastUpdate < CACHE_DURATION
-    );
+    return !this.settings.isOfflineMode && Date.now() - this.settings.lastUpdate < CACHE_DURATION;
   }
 
   updateSettings(settings: Partial<ConverterSettings>): void {
     this.settings = { ...this.settings, ...settings };
   }
-} 
+}

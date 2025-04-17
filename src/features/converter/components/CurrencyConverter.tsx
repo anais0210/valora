@@ -1,24 +1,14 @@
 import React, { useState } from 'react';
 import { ConversionHistory } from './ConversionHistory';
 import { FavoritePairs } from './FavoritePairs';
-import { ExchangeRate } from './ExchangeRate';
 import { DataManagement } from './DataManagement';
-import { ConverterSettings } from './ConverterSettings';
 import { SingleConversion } from './SingleConversion';
 import { MultipleConversion } from './MultipleConversion';
 import { useConverterStore } from '../store';
 
 export const CurrencyConverter: React.FC = () => {
   const [conversionMode, setConversionMode] = useState<'single' | 'multiple'>('single');
-  const { 
-    currentConversion, 
-    currentMultipleConversions,
-    fromCurrency, 
-    toCurrency, 
-    exchangeRate, 
-    settings,
-    updateCurrencies 
-  } = useConverterStore();
+  const { currentConversion, currentMultipleConversions, updateCurrencies } = useConverterStore();
 
   const handlePairSelection = (from: string, to: string) => {
     updateCurrencies(from, to);
@@ -31,7 +21,7 @@ export const CurrencyConverter: React.FC = () => {
         <div className="lg:col-span-2 space-y-6">
           <div className="bg-surface-light rounded-lg shadow-lg p-6">
             <h1 className="text-2xl font-bold text-primary-600 mb-6">Convertisseur de Devises</h1>
-            
+
             {/* Sélecteur de mode */}
             <div className="flex space-x-4 mb-6">
               <button
@@ -56,16 +46,10 @@ export const CurrencyConverter: React.FC = () => {
               </button>
             </div>
 
-            <div>
-              {conversionMode === 'single' ? (
-                <SingleConversion />
-              ) : (
-                <MultipleConversion />
-              )}
-            </div>
+            <div>{conversionMode === 'single' ? <SingleConversion /> : <MultipleConversion />}</div>
 
             <div className="mt-6">
-              <DataManagement 
+              <DataManagement
                 currentConversion={currentConversion}
                 currentMultipleConversions={currentMultipleConversions}
                 conversionMode={conversionMode}
@@ -82,4 +66,4 @@ export const CurrencyConverter: React.FC = () => {
       </div>
     </div>
   );
-}; 
+};

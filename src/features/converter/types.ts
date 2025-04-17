@@ -18,4 +18,4 @@ export interface ConverterSettings {
   isOfflineMode: boolean;
   lastUpdate: number;
   cachedRates: Record<string, number>;
-} 
+}

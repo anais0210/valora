@@ -54,13 +54,13 @@ const defaultSettings: ConverterSettings = {
     ZAR: 'Rand sud-africain',
     TRY: 'Livre turque',
     RUB: 'Rouble russe',
-    KRW: 'Won sud-coréen'
-  }
+    KRW: 'Won sud-coréen',
+  },
 };
 
 export const useConverterStore = create<ConverterState>()(
   persist(
-    (set, get) => ({
+    set => ({
       conversions: [],
       favorites: [],
       settings: defaultSettings,
@@ -69,27 +69,27 @@ export const useConverterStore = create<ConverterState>()(
       fromCurrency: 'EUR',
       toCurrency: 'USD',
       exchangeRate: 0,
-      addConversion: (conversion) =>
-        set((state) => ({
+      addConversion: conversion =>
+        set(state => ({
           conversions: [conversion, ...state.conversions].slice(0, 10),
         })),
-      addFavorite: (pair) =>
-        set((state) => ({
+      addFavorite: pair =>
+        set(state => ({
           favorites: [...state.favorites, pair],
         })),
-      removeFavorite: (id) =>
-        set((state) => ({
-          favorites: state.favorites.filter((f) => f.id !== id),
+      removeFavorite: id =>
+        set(state => ({
+          favorites: state.favorites.filter(f => f.id !== id),
         })),
-      updateSettings: (newSettings) =>
-        set((state) => ({
+      updateSettings: newSettings =>
+        set(state => ({
           settings: { ...state.settings, ...newSettings },
         })),
-      updateCurrentConversion: (conversion) =>
+      updateCurrentConversion: conversion =>
         set(() => ({
           currentConversion: conversion,
         })),
-      updateCurrentMultipleConversions: (conversions) =>
+      updateCurrentMultipleConversions: conversions =>
         set(() => ({
           currentMultipleConversions: conversions,
         })),
@@ -98,18 +98,18 @@ export const useConverterStore = create<ConverterState>()(
           fromCurrency: from,
           toCurrency: to,
         })),
-      updateExchangeRate: (rate) =>
+      updateExchangeRate: rate =>
         set(() => ({
           exchangeRate: rate,
         })),
     }),
     {
       name: 'converter-storage',
-      onRehydrateStorage: () => (state) => {
+      onRehydrateStorage: () => state => {
         if (!state?.settings?.availableCurrencies) {
           state?.updateSettings(defaultSettings);
         }
       },
     }
   )
-); 
+);

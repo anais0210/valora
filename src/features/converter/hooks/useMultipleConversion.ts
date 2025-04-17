@@ -13,7 +13,7 @@ export const useMultipleConversion = () => {
     toCurrency,
     exchangeRate,
     updateCurrentMultipleConversions,
-    addConversion
+    addConversion,
   } = useConverterStore();
 
   const { updateMultipleHistory } = useConversionHistory();
@@ -30,7 +30,7 @@ export const useMultipleConversion = () => {
   const handleConvertAll = async () => {
     setError(null);
     const values = parseAmounts(multipleAmounts);
-    
+
     if (values.length === 0) {
       setError('Veuillez entrer au moins un montant valide');
       return;
@@ -39,14 +39,14 @@ export const useMultipleConversion = () => {
     setIsLoading(true);
     try {
       await new Promise(resolve => setTimeout(resolve, 500));
-      
+
       const newConversions: Conversion[] = values.map(amount => ({
         from: fromCurrency,
         to: toCurrency,
         amount,
         rate: exchangeRate,
         timestamp: Date.now(),
-        result: amount * exchangeRate
+        result: amount * exchangeRate,
       }));
 
       updateCurrentMultipleConversions(newConversions);
@@ -73,6 +73,6 @@ export const useMultipleConversion = () => {
     isLoading,
     error,
     handleConvertAll,
-    handleReset
+    handleReset,
   };
-}; 
+};

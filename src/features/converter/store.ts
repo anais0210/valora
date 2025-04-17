@@ -26,7 +26,7 @@ interface ConverterState {
 
 export const useConverterStore = create<ConverterState>()(
   persist(
-    (set) => ({
+    set => ({
       conversions: [],
       favorites: [],
       currentConversion: null,
@@ -41,22 +41,20 @@ export const useConverterStore = create<ConverterState>()(
         cachedRates: {},
         availableCurrencies: ConverterService.getCurrencyNames(),
       },
-      addConversion: (conversion) =>
-        set((state) => ({
+      addConversion: conversion =>
+        set(state => ({
           conversions: [conversion, ...state.conversions],
         })),
-      addFavorite: (pair) =>
-        set((state) => ({
+      addFavorite: pair =>
+        set(state => ({
           favorites: [...state.favorites, pair],
         })),
-      removeFavorite: (pair) =>
-        set((state) => ({
-          favorites: state.favorites.filter(
-            (f) => f.from !== pair.from || f.to !== pair.to
-          ),
+      removeFavorite: pair =>
+        set(state => ({
+          favorites: state.favorites.filter(f => f.from !== pair.from || f.to !== pair.to),
         })),
-      updateSettings: (newSettings) =>
-        set((state) => ({
+      updateSettings: newSettings =>
+        set(state => ({
           settings: { ...state.settings, ...newSettings },
         })),
       getAvailableCurrencies: () => ConverterService.getCurrencyNames(),
@@ -65,15 +63,15 @@ export const useConverterStore = create<ConverterState>()(
           fromCurrency: from,
           toCurrency: to,
         })),
-      updateCurrentConversion: (conversion) =>
+      updateCurrentConversion: conversion =>
         set(() => ({
           currentConversion: conversion,
         })),
-      updateCurrentMultipleConversions: (conversions) =>
+      updateCurrentMultipleConversions: conversions =>
         set(() => ({
           currentMultipleConversions: conversions,
         })),
-      updateExchangeRate: (rate) =>
+      updateExchangeRate: rate =>
         set(() => ({
           exchangeRate: rate,
         })),
@@ -86,7 +84,7 @@ export const useConverterStore = create<ConverterState>()(
     }),
     {
       name: 'converter-storage',
-      onRehydrateStorage: () => (state) => {
+      onRehydrateStorage: () => state => {
         if (state?.settings) {
           ConverterService.getInstance(state.settings);
         }

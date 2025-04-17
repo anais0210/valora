@@ -227,7 +227,11 @@ export class ConverterService {
     }
   }
 
-  public async exportToExcel(conversions: Conversion[], sourceCurrency: string, targetCurrency: string): Promise<Blob> {
+  public async exportToExcel(
+    conversions: Conversion[],
+    sourceCurrency: string,
+    targetCurrency: string
+  ): Promise<Blob> {
     const workbook = new ExcelJS.Workbook();
     workbook.creator = 'Valora';
     workbook.lastModifiedBy = 'Valora';

@@ -25,13 +25,14 @@ export const useConversion = () => {
       try {
         const response = await fetch('https://api.exchangerate-api.com/v4/latest/EUR');
         const data = await response.json();
-        
+
         // Si la devise source est EUR, on utilise directement le taux de la devise cible
         // Sinon, on calcule le taux croisé via EUR
-        const rate = fromCurrency === 'EUR' 
-          ? data.rates[toCurrency]
-          : data.rates[toCurrency] / data.rates[fromCurrency];
-        
+        const rate =
+          fromCurrency === 'EUR'
+            ? data.rates[toCurrency]
+            : data.rates[toCurrency] / data.rates[fromCurrency];
+
         updateExchangeRate(rate);
 
         if (currentConversion) {
@@ -52,19 +53,22 @@ export const useConversion = () => {
     };
 
     fetchExchangeRate();
-  }, [fromCurrency, toCurrency]);
+  }, [fromCurrency, toCurrency, currentConversion, updateCurrentConversion, updateExchangeRate]);
 
-  const debouncedAddConversion = useCallback((conversion: Conversion) => {
-    if (debounceTimer) {
-      clearTimeout(debounceTimer);
-    }
+  const debouncedAddConversion = useCallback(
+    (conversion: Conversion) => {
+      if (debounceTimer) {
+        clearTimeout(debounceTimer);
+      }
 
-    const timer = setTimeout(() => {
-      addConversion(conversion);
-    }, 500);
+      const timer = setTimeout(() => {
+        addConversion(conversion);
+      }, 500);
 
-    setDebounceTimer(timer);
-  }, [debounceTimer, addConversion]);
+      setDebounceTimer(timer);
+    },
+    [debounceTimer, addConversion]
+  );
 
   const handleAmountChange = (amount: number) => {
     if (!isNaN(amount)) {

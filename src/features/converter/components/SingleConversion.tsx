@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { CurrencySelect } from './CurrencySelect';
 import { ConversionResult } from './ConversionResult';
 import { useConversion } from '../hooks/useConversion';
@@ -13,6 +13,16 @@ export const SingleConversion: React.FC = () => {
     handleCurrencyChange,
     handleReset,
   } = useConversion();
+  
+  const [localAmount, setLocalAmount] = useState<string>('');
+  
+  useEffect(() => {
+    if (currentConversion?.amount !== undefined) {
+      setLocalAmount(currentConversion.amount.toString());
+    } else {
+      setLocalAmount('');
+    }
+  }, [currentConversion?.amount]);
 
   return (
     <div className="space-y-6">
@@ -25,11 +35,14 @@ export const SingleConversion: React.FC = () => {
             <input
               type="text"
               id="amount"
-              value={currentConversion?.amount || ''}
+              value={localAmount}
               onChange={e => {
                 const value = e.target.value;
                 if (value === '' || /^\d*\.?\d*$/.test(value)) {
-                  handleAmountChange(value === '' ? 0 : parseFloat(value));
+                  setLocalAmount(value);
+                  if (value !== '') {
+                    handleAmountChange(parseFloat(value));
+                  }
                 }
               }}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"

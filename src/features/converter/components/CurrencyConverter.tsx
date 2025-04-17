@@ -46,11 +46,7 @@ export const CurrencyConverter: React.FC = () => {
               </div>
             </div>
 
-            {conversionMode === 'single' ? (
-              <SingleConversion />
-            ) : (
-              <MultipleConversion />
-            )}
+            {conversionMode === 'single' ? <SingleConversion /> : <MultipleConversion />}
           </div>
 
           <ConversionHistory />

@@ -85,4 +85,4 @@ export const ExchangeRatesTable: React.FC = () => {
       </div>
     </div>
   );
-}; 
+};

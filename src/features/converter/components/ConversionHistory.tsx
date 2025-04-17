@@ -1,6 +1,5 @@
 import React from 'react';
 import { useConverterStore } from '../store';
-import { Conversion } from '../types';
 import { ConverterService } from '../services/converterService';
 
 export const ConversionHistory: React.FC = () => {
@@ -23,12 +22,12 @@ export const ConversionHistory: React.FC = () => {
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
     } catch (error) {
-      console.error('Erreur lors de l\'export Excel:', error);
+      console.error("Erreur lors de l'export Excel:", error);
     }
   };
 
   const handleResetHistory = () => {
-    if (window.confirm('Êtes-vous sûr de vouloir effacer tout l\'historique des conversions ?')) {
+    if (window.confirm("Êtes-vous sûr de vouloir effacer tout l'historique des conversions ?")) {
       resetConversions();
     }
   };

@@ -66,7 +66,7 @@ export const MultipleConversion: React.FC = () => {
         <button
           onClick={handleConvertAll}
           disabled={isLoading || !multipleAmounts.trim()}
-          className="px-6 py-3 bg-gradient-to-r from-accent-500 to-accent-600 hover:from-accent-600 hover:to-accent-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+          className="px-6 py-3 bg-gradient-to-r from-accent-500 to-accent-600 hover:from-accent-600 hover:to-accent-700 text-grey font-semibold rounded-lg shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
         >
           {isLoading ? 'Conversion...' : 'Convertir tout'}
         </button>

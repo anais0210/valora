@@ -1,9 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useConverterStore } from '../store';
+import { Conversion } from '../types';
 
 export const useConversion = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [debounceTimer, setDebounceTimer] = useState<ReturnType<typeof setTimeout> | null>(null);
 
   const {
     currentConversion,
@@ -40,7 +42,6 @@ export const useConversion = () => {
             result: newResult,
           };
           updateCurrentConversion(updatedConversion);
-          addConversion(updatedConversion);
         }
       } catch (err) {
         console.error('Erreur lors de la récupération du taux de change:', err);
@@ -53,6 +54,18 @@ export const useConversion = () => {
     fetchExchangeRate();
   }, [fromCurrency, toCurrency]);
 
+  const debouncedAddConversion = useCallback((conversion: Conversion) => {
+    if (debounceTimer) {
+      clearTimeout(debounceTimer);
+    }
+
+    const timer = setTimeout(() => {
+      addConversion(conversion);
+    }, 500);
+
+    setDebounceTimer(timer);
+  }, [debounceTimer, addConversion]);
+
   const handleAmountChange = (amount: number) => {
     if (!isNaN(amount)) {
       const conversion = {
@@ -64,7 +77,7 @@ export const useConversion = () => {
         result: amount * exchangeRate,
       };
       updateCurrentConversion(conversion);
-      addConversion(conversion);
+      debouncedAddConversion(conversion);
     }
   };
 
@@ -75,6 +88,10 @@ export const useConversion = () => {
   const handleReset = () => {
     updateCurrentConversion(null);
     setError(null);
+    if (debounceTimer) {
+      clearTimeout(debounceTimer);
+      setDebounceTimer(null);
+    }
   };
 
   return {

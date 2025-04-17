@@ -23,10 +23,15 @@ export const SingleConversion: React.FC = () => {
               Montant
             </label>
             <input
-              type="number"
+              type="text"
               id="amount"
               value={currentConversion?.amount || ''}
-              onChange={e => handleAmountChange(parseFloat(e.target.value))}
+              onChange={e => {
+                const value = e.target.value;
+                if (value === '' || /^\d*\.?\d*$/.test(value)) {
+                  handleAmountChange(value === '' ? 0 : parseFloat(value));
+                }
+              }}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
               placeholder="Entrez un montant"
             />

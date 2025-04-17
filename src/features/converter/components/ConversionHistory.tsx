@@ -4,7 +4,7 @@ import { Conversion, ConverterSettings } from '../types';
 import { ConverterService } from '../services/converterService';
 
 export const ConversionHistory: React.FC = () => {
-  const { conversions, settings } = useConverterStore();
+  const { conversions, settings, resetConversions } = useConverterStore();
   const converterService = ConverterService.getInstance(settings);
 
   const handleExportExcel = async () => {
@@ -37,6 +37,12 @@ export const ConversionHistory: React.FC = () => {
     }
   };
 
+  const handleResetHistory = () => {
+    if (window.confirm('Êtes-vous sûr de vouloir effacer tout l\'historique des conversions ?')) {
+      resetConversions();
+    }
+  };
+
   if (conversions.length === 0) {
     return (
       <div className="bg-surface-light rounded-lg shadow-lg border-2 border-primary-200 p-6 text-center">
@@ -49,12 +55,20 @@ export const ConversionHistory: React.FC = () => {
     <div className="bg-surface-light rounded-lg shadow-lg border-2 border-primary-200 overflow-hidden">
       <div className="bg-gradient-to-r from-primary-600 to-primary-700 p-4 flex justify-between items-center">
         <h2 className="text-xl font-semibold text-white">Historique des conversions</h2>
-        <button
-          onClick={handleExportExcel}
-          className="px-4 py-2 bg-white text-primary-600 rounded-lg hover:bg-primary-50 transition-colors"
-        >
-          Exporter Excel
-        </button>
+        <div className="flex space-x-2">
+          <button
+            onClick={handleExportExcel}
+            className="px-4 py-2 bg-white text-primary-600 rounded-lg hover:bg-primary-50 transition-colors"
+          >
+            Exporter Excel
+          </button>
+          <button
+            onClick={handleResetHistory}
+            className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+          >
+            Réinitialiser
+          </button>
+        </div>
       </div>
       <div className="divide-y divide-primary-100">
         {conversions.map((conversion, index) => (

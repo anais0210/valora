@@ -8,6 +8,7 @@ interface ConverterState {
   favorites: FavoritePair[];
   settings: ConverterSettings;
   currentConversion: Conversion | null;
+  currentMultipleConversions: Conversion[];
   fromCurrency: string;
   toCurrency: string;
   exchangeRate: number;
@@ -18,16 +19,18 @@ interface ConverterState {
   getAvailableCurrencies: () => Record<string, string>;
   updateCurrencies: (from: string, to: string) => void;
   updateCurrentConversion: (conversion: Conversion | null) => void;
+  updateCurrentMultipleConversions: (conversions: Conversion[]) => void;
   updateExchangeRate: (rate: number) => void;
   resetConversions: () => void;
 }
 
 export const useConverterStore = create<ConverterState>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       conversions: [],
       favorites: [],
       currentConversion: null,
+      currentMultipleConversions: [],
       fromCurrency: 'EUR',
       toCurrency: 'USD',
       exchangeRate: 1,
@@ -66,6 +69,10 @@ export const useConverterStore = create<ConverterState>()(
         set(() => ({
           currentConversion: conversion,
         })),
+      updateCurrentMultipleConversions: (conversions) =>
+        set(() => ({
+          currentMultipleConversions: conversions,
+        })),
       updateExchangeRate: (rate) =>
         set(() => ({
           exchangeRate: rate,
@@ -74,6 +81,7 @@ export const useConverterStore = create<ConverterState>()(
         set(() => ({
           conversions: [],
           currentConversion: null,
+          currentMultipleConversions: [],
         })),
     }),
     {

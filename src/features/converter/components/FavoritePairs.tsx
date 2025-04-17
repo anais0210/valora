@@ -49,7 +49,7 @@ export const FavoritePairs: React.FC<FavoritePairsProps> = ({ onSelectPair }) =>
             <button
               onClick={e => {
                 e.stopPropagation();
-                removeFavorite(favorite.id);
+                removeFavorite(favorite);
               }}
               className="opacity-0 group-hover:opacity-100 px-3 py-1 text-secondary-600 hover:text-secondary-800 hover:bg-secondary-100 rounded transition-all duration-200"
             >

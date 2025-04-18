@@ -35,7 +35,8 @@ export const useConversion = () => {
 
         updateExchangeRate(rate);
 
-        if (currentConversion) {
+        // Ne mettre à jour la conversion que si elle existe et que le montant est défini
+        if (currentConversion && currentConversion.amount !== undefined) {
           const newResult = currentConversion.amount * rate;
           const updatedConversion = {
             ...currentConversion,
@@ -53,7 +54,20 @@ export const useConversion = () => {
     };
 
     fetchExchangeRate();
-  }, [fromCurrency, toCurrency, currentConversion, updateCurrentConversion, updateExchangeRate]);
+  }, [fromCurrency, toCurrency, updateExchangeRate]);
+
+  // Effet séparé pour mettre à jour le résultat lorsque le taux de change ou la conversion change
+  useEffect(() => {
+    if (currentConversion && currentConversion.amount !== undefined && exchangeRate) {
+      const newResult = currentConversion.amount * exchangeRate;
+      const updatedConversion = {
+        ...currentConversion,
+        rate: exchangeRate,
+        result: newResult,
+      };
+      updateCurrentConversion(updatedConversion);
+    }
+  }, [exchangeRate, currentConversion?.amount, updateCurrentConversion]);
 
   const debouncedAddConversion = useCallback(
     (conversion: Conversion) => {

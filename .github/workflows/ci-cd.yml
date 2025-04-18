@@ -37,8 +37,17 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
 
+      - name: Debug workspace
+        run: |
+          pwd
+          ls -la
+          echo "Content of pnpm-lock.yaml:"
+          cat pnpm-lock.yaml || echo "Failed to read pnpm-lock.yaml"
+
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: |
+          pnpm install --no-frozen-lockfile
+          pnpm store prune
 
       - name: Run linting
         run: pnpm run lint

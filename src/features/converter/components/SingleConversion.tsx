@@ -24,6 +24,17 @@ export const SingleConversion: React.FC = () => {
     }
   }, [currentConversion?.amount]);
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (value === '' || /^\d*\.?\d*$/.test(value)) {
+      setLocalAmount(value);
+      
+      if (value !== '' && !isNaN(parseFloat(value))) {
+        handleAmountChange(parseFloat(value));
+      }
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div className="single-conversion-container">
@@ -36,15 +47,7 @@ export const SingleConversion: React.FC = () => {
               type="text"
               id="amount"
               value={localAmount}
-              onChange={e => {
-                const value = e.target.value;
-                if (value === '' || /^\d*\.?\d*$/.test(value)) {
-                  setLocalAmount(value);
-                  if (value !== '') {
-                    handleAmountChange(parseFloat(value));
-                  }
-                }
-              }}
+              onChange={handleInputChange}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
               placeholder="Entrez un montant"
             />

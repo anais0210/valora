@@ -13,9 +13,9 @@ export const SingleConversion: React.FC = () => {
     handleCurrencyChange,
     handleReset,
   } = useConversion();
-  
+
   const [localAmount, setLocalAmount] = useState<string>('');
-  
+
   useEffect(() => {
     if (currentConversion?.amount !== undefined) {
       setLocalAmount(currentConversion.amount.toString());

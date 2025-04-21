@@ -17,7 +17,7 @@ export const CurrencySelect: React.FC<CurrencySelectProps> = ({
   className = '',
 }) => {
   const id = `currency-select-${label.toLowerCase()}`;
-  
+
   return (
     <div>
       <label htmlFor={id} className="block text-sm font-medium text-[var(--color-green-800)] mb-1">

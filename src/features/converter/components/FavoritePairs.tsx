@@ -11,14 +11,22 @@ export const FavoritePairs: React.FC<FavoritePairsProps> = ({ onSelectPair }) =>
 
   if (favorites.length === 0) {
     return (
-      <div className="bg-[var(--color-beige-light)] rounded-xl p-4 border-2 border-[var(--color-green-200)] text-center shadow-sm" role="region" aria-label="Paires favorites">
+      <div
+        className="bg-[var(--color-beige-light)] rounded-xl p-4 border-2 border-[var(--color-green-200)] text-center shadow-sm"
+        role="region"
+        aria-label="Paires favorites"
+      >
         <p className="text-[var(--color-green-800)]">Aucune paire favorite enregistrée</p>
       </div>
     );
   }
 
   return (
-    <div className="bg-[var(--color-beige-light)] rounded-xl shadow-md border-2 border-[var(--color-green-200)] overflow-hidden" role="region" aria-label="Paires favorites">
+    <div
+      className="bg-[var(--color-beige-light)] rounded-xl shadow-md border-2 border-[var(--color-green-200)] overflow-hidden"
+      role="region"
+      aria-label="Paires favorites"
+    >
       <div className="bg-gradient-to-r from-[var(--color-green-500)] to-[var(--color-green-600)] p-4">
         <h2 className="text-lg font-bold text-white flex items-center gap-2">
           <svg
@@ -42,7 +50,7 @@ export const FavoritePairs: React.FC<FavoritePairsProps> = ({ onSelectPair }) =>
             onClick={() => onSelectPair(favorite.from, favorite.to)}
             role="listitem"
             tabIndex={0}
-            onKeyDown={(e) => {
+            onKeyDown={e => {
               if (e.key === 'Enter' || e.key === ' ') {
                 onSelectPair(favorite.from, favorite.to);
               }
@@ -50,7 +58,9 @@ export const FavoritePairs: React.FC<FavoritePairsProps> = ({ onSelectPair }) =>
           >
             <div className="flex items-center space-x-2">
               <span className="font-medium text-[var(--color-green-800)]">{favorite.from}</span>
-              <span className="text-[var(--color-amber-600)]" aria-hidden="true">→</span>
+              <span className="text-[var(--color-amber-600)]" aria-hidden="true">
+                →
+              </span>
               <span className="font-medium text-[var(--color-green-800)]">{favorite.to}</span>
             </div>
 

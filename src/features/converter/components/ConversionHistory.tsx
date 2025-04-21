@@ -34,7 +34,11 @@ export const ConversionHistory: React.FC = () => {
 
   if (conversions.length === 0) {
     return (
-      <div className="bg-[var(--color-beige-light)] rounded-xl p-4 border-2 border-[var(--color-green-200)] text-center shadow-sm" role="region" aria-label="Historique des conversions">
+      <div
+        className="bg-[var(--color-beige-light)] rounded-xl p-4 border-2 border-[var(--color-green-200)] text-center shadow-sm"
+        role="region"
+        aria-label="Historique des conversions"
+      >
         <p className="text-[var(--color-green-800)]">Aucune conversion enregistrée</p>
       </div>
     );
@@ -54,7 +58,11 @@ export const ConversionHistory: React.FC = () => {
   );
 
   return (
-    <div className="bg-[var(--color-beige-light)] rounded-xl shadow-md border-2 border-[var(--color-green-200)] overflow-hidden" role="region" aria-label="Historique des conversions">
+    <div
+      className="bg-[var(--color-beige-light)] rounded-xl shadow-md border-2 border-[var(--color-green-200)] overflow-hidden"
+      role="region"
+      aria-label="Historique des conversions"
+    >
       <div className="bg-gradient-to-r from-[var(--color-green-500)] to-[var(--color-green-600)] p-4 flex justify-between items-center">
         <h2 className="text-lg font-bold text-white flex items-center gap-2">
           <svg
@@ -107,7 +115,9 @@ export const ConversionHistory: React.FC = () => {
                         <span className="font-medium text-[var(--color-green-800)]">
                           {conversion.from}
                         </span>
-                        <span className="text-[var(--color-amber-600)]" aria-hidden="true">→</span>
+                        <span className="text-[var(--color-amber-600)]" aria-hidden="true">
+                          →
+                        </span>
                         <span className="font-medium text-[var(--color-green-800)]">
                           {conversion.to}
                         </span>

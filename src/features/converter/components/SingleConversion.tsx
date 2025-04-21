@@ -52,7 +52,10 @@ export const SingleConversion: React.FC = () => {
       <div className="single-conversion-container">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label htmlFor="amount" className="block text-sm font-semibold text-[var(--color-green-800)] mb-2">
+            <label
+              htmlFor="amount"
+              className="block text-sm font-semibold text-[var(--color-green-800)] mb-2"
+            >
               Montant
             </label>
             <input

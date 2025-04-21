@@ -17,7 +17,7 @@ export const ConversionResult: React.FC<ConversionResultProps> = ({
   const resultValue = conversion?.result
     ? `${conversion.result.toFixed(settings.decimalPlaces)} ${toCurrency}`
     : `0.${'0'.repeat(settings.decimalPlaces)} ${toCurrency}`;
-    
+
   return (
     <div role="region" aria-label="Résultat de la conversion">
       <label className="block text-sm font-medium text-[var(--color-green-800)] mb-1">

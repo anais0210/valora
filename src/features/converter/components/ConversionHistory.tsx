@@ -41,14 +41,17 @@ export const ConversionHistory: React.FC = () => {
   }
 
   // Grouper les conversions par jour
-  const groupedConversions = conversions.reduce((groups, conversion) => {
-    const date = new Date(conversion.timestamp).toLocaleDateString('fr-FR');
-    if (!groups[date]) {
-      groups[date] = [];
-    }
-    groups[date].push(conversion);
-    return groups;
-  }, {} as Record<string, typeof conversions>);
+  const groupedConversions = conversions.reduce(
+    (groups, conversion) => {
+      const date = new Date(conversion.timestamp).toLocaleDateString('fr-FR');
+      if (!groups[date]) {
+        groups[date] = [];
+      }
+      groups[date].push(conversion);
+      return groups;
+    },
+    {} as Record<string, typeof conversions>
+  );
 
   return (
     <div className="bg-[var(--color-beige-light)] rounded-xl shadow-md border-2 border-[var(--color-green-200)] overflow-hidden">
@@ -97,9 +100,13 @@ export const ConversionHistory: React.FC = () => {
                   <div className="flex justify-between items-start">
                     <div className="space-y-1">
                       <div className="flex items-center space-x-2">
-                        <span className="font-medium text-[var(--color-green-800)]">{conversion.from}</span>
+                        <span className="font-medium text-[var(--color-green-800)]">
+                          {conversion.from}
+                        </span>
                         <span className="text-[var(--color-amber-600)]">→</span>
-                        <span className="font-medium text-[var(--color-green-800)]">{conversion.to}</span>
+                        <span className="font-medium text-[var(--color-green-800)]">
+                          {conversion.to}
+                        </span>
                       </div>
                       <div className="text-sm text-[var(--color-green-700)]">
                         {conversion.amount.toFixed(settings.decimalPlaces)} {conversion.from} ={' '}

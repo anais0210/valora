@@ -18,7 +18,9 @@ export const CurrencySelect: React.FC<CurrencySelectProps> = ({
 }) => {
   return (
     <div>
-      <label className="block text-sm font-medium text-[var(--color-green-800)] mb-1">{label}</label>
+      <label className="block text-sm font-medium text-[var(--color-green-800)] mb-1">
+        {label}
+      </label>
       <select
         value={value}
         onChange={e => onChange(e.target.value)}

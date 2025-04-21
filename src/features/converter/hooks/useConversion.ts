@@ -7,6 +7,7 @@ export const useConversion = () => {
   const [error, setError] = useState<string | null>(null);
   const [debounceTimer, setDebounceTimer] = useState<ReturnType<typeof setTimeout> | null>(null);
   const prevCurrenciesRef = useRef({ from: '', to: '' });
+  const isUpdatingRef = useRef(false);
 
   const {
     currentConversion,
@@ -22,6 +23,9 @@ export const useConversion = () => {
 
   // Utiliser useCallback pour la fonction fetchExchangeRate
   const fetchExchangeRate = useCallback(async () => {
+    if (isUpdatingRef.current) return;
+    isUpdatingRef.current = true;
+
     setIsLoading(true);
     try {
       const response = await fetch('https://api.exchangerate-api.com/v4/latest/EUR');
@@ -38,12 +42,12 @@ export const useConversion = () => {
       setError('Impossible de récupérer le taux de change');
     } finally {
       setIsLoading(false);
+      isUpdatingRef.current = false;
     }
   }, [fromCurrency, toCurrency, updateExchangeRate]);
 
   // Effet pour récupérer le taux de change uniquement quand les devises changent
   useEffect(() => {
-    // Vérifier si les devises ont réellement changé
     if (
       prevCurrenciesRef.current.from === fromCurrency &&
       prevCurrenciesRef.current.to === toCurrency
@@ -51,23 +55,23 @@ export const useConversion = () => {
       return;
     }
 
-    // Mettre à jour la référence
     prevCurrenciesRef.current = { from: fromCurrency, to: toCurrency };
-
     fetchExchangeRate();
-  }, [fetchExchangeRate, fromCurrency, toCurrency]);
+  }, [fromCurrency, toCurrency, fetchExchangeRate]);
 
   // Effet pour mettre à jour la conversion quand le taux change
   useEffect(() => {
-    if (currentConversion?.amount !== undefined && exchangeRate) {
-      const newResult = currentConversion.amount * exchangeRate;
-      const updatedConversion = {
-        ...currentConversion,
-        rate: exchangeRate,
-        result: newResult,
-      };
-      updateCurrentConversion(updatedConversion);
-    }
+    if (!currentConversion?.amount || !exchangeRate || isUpdatingRef.current) return;
+
+    isUpdatingRef.current = true;
+    const newResult = currentConversion.amount * exchangeRate;
+    const updatedConversion = {
+      ...currentConversion,
+      rate: exchangeRate,
+      result: newResult,
+    };
+    updateCurrentConversion(updatedConversion);
+    isUpdatingRef.current = false;
   }, [exchangeRate, currentConversion, updateCurrentConversion]);
 
   const debouncedAddConversion = useCallback(
@@ -85,33 +89,41 @@ export const useConversion = () => {
     [debounceTimer, addConversion]
   );
 
-  const handleAmountChange = (amount: number) => {
-    if (!isNaN(amount)) {
-      const conversion = {
-        from: fromCurrency,
-        to: toCurrency,
-        amount,
-        rate: exchangeRate,
-        timestamp: Date.now(),
-        result: amount * exchangeRate,
-      };
-      updateCurrentConversion(conversion);
-      debouncedAddConversion(conversion);
-    }
-  };
+  const handleAmountChange = useCallback(
+    (amount: number) => {
+      if (!isNaN(amount) && !isUpdatingRef.current) {
+        isUpdatingRef.current = true;
+        const conversion = {
+          from: fromCurrency,
+          to: toCurrency,
+          amount,
+          rate: exchangeRate,
+          timestamp: Date.now(),
+          result: amount * (exchangeRate || 1),
+        };
+        updateCurrentConversion(conversion);
+        debouncedAddConversion(conversion);
+        isUpdatingRef.current = false;
+      }
+    },
+    [fromCurrency, toCurrency, exchangeRate, updateCurrentConversion, debouncedAddConversion]
+  );
 
-  const handleCurrencyChange = (from: string, to: string) => {
-    updateCurrencies(from, to);
-  };
+  const handleCurrencyChange = useCallback(
+    (from: string, to: string) => {
+      updateCurrencies(from, to);
+    },
+    [updateCurrencies]
+  );
 
-  const handleReset = () => {
+  const handleReset = useCallback(() => {
     updateCurrentConversion(null);
     setError(null);
     if (debounceTimer) {
       clearTimeout(debounceTimer);
       setDebounceTimer(null);
     }
-  };
+  }, [debounceTimer, updateCurrentConversion]);
 
   return {
     isLoading,

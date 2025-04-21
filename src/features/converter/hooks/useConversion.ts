@@ -19,6 +19,7 @@ export const useConversion = () => {
     addConversion,
   } = useConverterStore();
 
+  // Effet pour récupérer le taux de change
   useEffect(() => {
     const fetchExchangeRate = async () => {
       setIsLoading(true);
@@ -26,25 +27,12 @@ export const useConversion = () => {
         const response = await fetch('https://api.exchangerate-api.com/v4/latest/EUR');
         const data = await response.json();
 
-        // Si la devise source est EUR, on utilise directement le taux de la devise cible
-        // Sinon, on calcule le taux croisé via EUR
         const rate =
           fromCurrency === 'EUR'
             ? data.rates[toCurrency]
             : data.rates[toCurrency] / data.rates[fromCurrency];
 
         updateExchangeRate(rate);
-
-        // Ne mettre à jour la conversion que si elle existe et que le montant est défini
-        if (currentConversion && currentConversion.amount !== undefined) {
-          const newResult = currentConversion.amount * rate;
-          const updatedConversion = {
-            ...currentConversion,
-            rate,
-            result: newResult,
-          };
-          updateCurrentConversion(updatedConversion);
-        }
       } catch (err) {
         console.error('Erreur lors de la récupération du taux de change:', err);
         setError('Impossible de récupérer le taux de change');
@@ -54,11 +42,11 @@ export const useConversion = () => {
     };
 
     fetchExchangeRate();
-  }, [fromCurrency, toCurrency, updateExchangeRate, currentConversion, updateCurrentConversion]);
+  }, [fromCurrency, toCurrency, updateExchangeRate]);
 
-  // Effet séparé pour mettre à jour le résultat lorsque le taux de change ou la conversion change
+  // Effet pour mettre à jour la conversion quand le taux change
   useEffect(() => {
-    if (currentConversion && currentConversion.amount !== undefined && exchangeRate) {
+    if (currentConversion?.amount !== undefined && exchangeRate) {
       const newResult = currentConversion.amount * exchangeRate;
       const updatedConversion = {
         ...currentConversion,
@@ -67,7 +55,7 @@ export const useConversion = () => {
       };
       updateCurrentConversion(updatedConversion);
     }
-  }, [exchangeRate, currentConversion, updateCurrentConversion]);
+  }, [exchangeRate, currentConversion?.amount, updateCurrentConversion]);
 
   const debouncedAddConversion = useCallback(
     (conversion: Conversion) => {

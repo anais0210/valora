@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { CurrencySelect } from './CurrencySelect';
 import { ConversionResult } from './ConversionResult';
 import { useConversion } from '../hooks/useConversion';
@@ -17,15 +17,30 @@ export const SingleConversion: React.FC = () => {
 
   const { addFavorite } = useConverterStore();
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.replace(',', '.');
-    const amount = parseFloat(value);
-    if (!isNaN(amount)) {
-      handleAmountChange(amount);
-    }
-  };
+  const handleInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const value = e.target.value.replace(',', '.');
+      const amount = parseFloat(value);
+      if (!isNaN(amount)) {
+        handleAmountChange(amount);
+      }
+    },
+    [handleAmountChange]
+  );
 
-  const localAmount = currentConversion?.amount?.toString() || '';
+  const handleAddFavorite = useCallback(() => {
+    const favorite = {
+      from: fromCurrency,
+      to: toCurrency,
+      id: `${fromCurrency}-${toCurrency}-${Date.now()}`,
+    };
+    addFavorite(favorite);
+  }, [fromCurrency, toCurrency, addFavorite]);
+
+  const localAmount = useMemo(
+    () => currentConversion?.amount?.toString() || '',
+    [currentConversion?.amount]
+  );
 
   return (
     <div className="space-y-6">
@@ -68,14 +83,7 @@ export const SingleConversion: React.FC = () => {
 
         <div className="flex justify-end mt-4 gap-4">
           <button
-            onClick={() => {
-              const favorite = {
-                from: fromCurrency,
-                to: toCurrency,
-                id: `${fromCurrency}-${toCurrency}-${Date.now()}`,
-              };
-              addFavorite(favorite);
-            }}
+            onClick={handleAddFavorite}
             className="px-6 py-3 bg-[var(--color-amber-100)] hover:bg-[var(--color-amber-200)] text-[var(--color-amber-800)] font-semibold rounded-xl shadow-md hover:shadow-lg transition-all duration-200 ease-in-out flex items-center gap-2"
           >
             <svg

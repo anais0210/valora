@@ -5,9 +5,10 @@ import { Conversion } from '../types';
 export const useConversion = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [debounceTimer, setDebounceTimer] = useState<ReturnType<typeof setTimeout> | null>(null);
+  const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const prevCurrenciesRef = useRef({ from: '', to: '' });
   const isUpdatingRef = useRef(false);
+  const prevAmountRef = useRef<number | null>(null);
 
   const {
     currentConversion,
@@ -21,7 +22,6 @@ export const useConversion = () => {
     addConversion,
   } = useConverterStore();
 
-  // Utiliser useCallback pour la fonction fetchExchangeRate
   const fetchExchangeRate = useCallback(async () => {
     if (isUpdatingRef.current) return;
     isUpdatingRef.current = true;
@@ -46,7 +46,6 @@ export const useConversion = () => {
     }
   }, [fromCurrency, toCurrency, updateExchangeRate]);
 
-  // Effet pour récupérer le taux de change uniquement quand les devises changent
   useEffect(() => {
     if (
       prevCurrenciesRef.current.from === fromCurrency &&
@@ -59,9 +58,9 @@ export const useConversion = () => {
     fetchExchangeRate();
   }, [fromCurrency, toCurrency, fetchExchangeRate]);
 
-  // Effet pour mettre à jour la conversion quand le taux change
   useEffect(() => {
     if (!currentConversion?.amount || !exchangeRate || isUpdatingRef.current) return;
+    if (prevAmountRef.current === currentConversion.amount) return;
 
     isUpdatingRef.current = true;
     const newResult = currentConversion.amount * exchangeRate;
@@ -71,27 +70,26 @@ export const useConversion = () => {
       result: newResult,
     };
     updateCurrentConversion(updatedConversion);
+    prevAmountRef.current = currentConversion.amount;
     isUpdatingRef.current = false;
   }, [exchangeRate, currentConversion, updateCurrentConversion]);
 
   const debouncedAddConversion = useCallback(
     (conversion: Conversion) => {
-      if (debounceTimer) {
-        clearTimeout(debounceTimer);
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
       }
 
-      const timer = setTimeout(() => {
+      debounceTimerRef.current = setTimeout(() => {
         addConversion(conversion);
       }, 500);
-
-      setDebounceTimer(timer);
     },
-    [debounceTimer, addConversion]
+    [addConversion]
   );
 
   const handleAmountChange = useCallback(
     (amount: number) => {
-      if (!isNaN(amount) && !isUpdatingRef.current) {
+      if (!isNaN(amount) && !isUpdatingRef.current && prevAmountRef.current !== amount) {
         isUpdatingRef.current = true;
         const conversion = {
           from: fromCurrency,
@@ -103,6 +101,7 @@ export const useConversion = () => {
         };
         updateCurrentConversion(conversion);
         debouncedAddConversion(conversion);
+        prevAmountRef.current = amount;
         isUpdatingRef.current = false;
       }
     },
@@ -119,11 +118,12 @@ export const useConversion = () => {
   const handleReset = useCallback(() => {
     updateCurrentConversion(null);
     setError(null);
-    if (debounceTimer) {
-      clearTimeout(debounceTimer);
-      setDebounceTimer(null);
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+      debounceTimerRef.current = null;
     }
-  }, [debounceTimer, updateCurrentConversion]);
+    prevAmountRef.current = null;
+  }, [updateCurrentConversion]);
 
   return {
     isLoading,

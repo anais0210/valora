@@ -55,7 +55,7 @@ export const useConversion = () => {
     prevCurrenciesRef.current = { from: fromCurrency, to: toCurrency };
 
     fetchExchangeRate();
-  }, [fetchExchangeRate, fromCurrency, toCurrency]);
+  }, [fromCurrency, toCurrency, fetchExchangeRate]);
 
   // Effet pour mettre à jour la conversion quand le taux change
   useEffect(() => {

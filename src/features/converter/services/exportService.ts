@@ -1,5 +1,5 @@
 import { Conversion, FavoritePair } from '../types';
-import * as XLSX from 'xlsx';
+import ExcelJS from 'exceljs';
 
 interface ExportData {
   conversions: Conversion[];
@@ -29,37 +29,41 @@ export class ExportService {
     URL.revokeObjectURL(url);
   }
 
-  static exportToXLS(conversions: Conversion[], favorites: FavoritePair[]): void {
-    // Créer un classeur Excel
-    const workbook = XLSX.utils.book_new();
+  static exportToExcel = async (conversions: Conversion[]) => {
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Conversions');
 
-    // Préparer les données des conversions
-    const conversionsData = conversions.map(conv => ({
-      Date: new Date(conv.timestamp).toLocaleString('fr-FR'),
-      De: conv.from,
-      Vers: conv.to,
-      Montant: conv.amount,
-      Résultat: conv.result,
-      Taux: conv.rate,
-    }));
+    worksheet.columns = [
+      { header: 'Date', key: 'date', width: 20 },
+      { header: 'De', key: 'from', width: 10 },
+      { header: 'Vers', key: 'to', width: 10 },
+      { header: 'Montant', key: 'amount', width: 15 },
+      { header: 'Taux', key: 'rate', width: 15 },
+      { header: 'Résultat', key: 'result', width: 15 },
+    ];
 
-    // Créer une feuille pour les conversions
-    const conversionsSheet = XLSX.utils.json_to_sheet(conversionsData);
-    XLSX.utils.book_append_sheet(workbook, conversionsSheet, 'Conversions');
+    conversions.forEach(conversion => {
+      worksheet.addRow({
+        date: new Date(conversion.timestamp).toLocaleString(),
+        from: conversion.from,
+        to: conversion.to,
+        amount: conversion.amount,
+        rate: conversion.rate,
+        result: conversion.result,
+      });
+    });
 
-    // Préparer les données des favoris
-    const favoritesData = favorites.map(fav => ({
-      De: fav.from,
-      Vers: fav.to,
-    }));
-
-    // Créer une feuille pour les favoris
-    const favoritesSheet = XLSX.utils.json_to_sheet(favoritesData);
-    XLSX.utils.book_append_sheet(workbook, favoritesSheet, 'Favoris');
-
-    // Générer le fichier Excel
-    XLSX.writeFile(workbook, `valora-export-${new Date().toISOString().split('T')[0]}.xlsx`);
-  }
+    const buffer = await workbook.xlsx.writeBuffer();
+    const blob = new Blob([buffer], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `conversions-${new Date().toISOString().split('T')[0]}.xlsx`;
+    link.click();
+    window.URL.revokeObjectURL(url);
+  };
 
   static importFromJSON(file: File): Promise<ExportData> {
     return new Promise((resolve, reject) => {

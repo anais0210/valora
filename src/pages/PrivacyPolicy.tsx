@@ -115,7 +115,7 @@ export const PrivacyPolicy: React.FC = () => {
               </ul>
               <p className="mt-2">
                 Pour exercer vos droits, vous pouvez nous contacter à l'adresse suivante :
-                contact@valora.com
+                anais.camille.sparesotto@gmail.com
               </p>
             </section>
 

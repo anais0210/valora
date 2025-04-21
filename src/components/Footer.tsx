@@ -5,12 +5,18 @@ export const Footer: React.FC = () => {
   return (
     <footer className="bg-[var(--color-beige-light)] border-t border-[var(--color-green-200)] py-4 mt-auto">
       <div className="container mx-auto px-4">
-        <div className="flex justify-center items-center">
+        <div className="flex justify-center items-center space-x-6">
           <Link
             to="/privacy-policy"
             className="text-[var(--color-green-800)] hover:text-[var(--color-green-600)] transition-colors duration-200 text-sm"
           >
             Politique de confidentialité
+          </Link>
+          <Link
+            to="/accessibility"
+            className="text-[var(--color-green-800)] hover:text-[var(--color-green-600)] transition-colors duration-200 text-sm"
+          >
+            Déclaration d'accessibilité
           </Link>
         </div>
       </div>

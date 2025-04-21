@@ -34,7 +34,11 @@ export const ConversionHistory: React.FC = () => {
 
   if (conversions.length === 0) {
     return (
-      <div className="bg-[var(--color-beige-light)] rounded-xl p-4 border-2 border-[var(--color-green-200)] text-center shadow-sm">
+      <div
+        className="bg-[var(--color-beige-light)] rounded-xl p-4 border-2 border-[var(--color-green-200)] text-center shadow-sm"
+        role="region"
+        aria-label="Historique des conversions"
+      >
         <p className="text-[var(--color-green-800)]">Aucune conversion enregistrée</p>
       </div>
     );
@@ -54,7 +58,11 @@ export const ConversionHistory: React.FC = () => {
   );
 
   return (
-    <div className="bg-[var(--color-beige-light)] rounded-xl shadow-md border-2 border-[var(--color-green-200)] overflow-hidden">
+    <div
+      className="bg-[var(--color-beige-light)] rounded-xl shadow-md border-2 border-[var(--color-green-200)] overflow-hidden"
+      role="region"
+      aria-label="Historique des conversions"
+    >
       <div className="bg-gradient-to-r from-[var(--color-green-500)] to-[var(--color-green-600)] p-4 flex justify-between items-center">
         <h2 className="text-lg font-bold text-white flex items-center gap-2">
           <svg
@@ -62,6 +70,7 @@ export const ConversionHistory: React.FC = () => {
             className="h-5 w-5"
             viewBox="0 0 20 20"
             fill="currentColor"
+            aria-hidden="true"
           >
             <path
               fillRule="evenodd"
@@ -75,27 +84,30 @@ export const ConversionHistory: React.FC = () => {
           <button
             onClick={handleExportExcel}
             className="px-3 py-1 bg-white text-[var(--color-green-600)] rounded-xl hover:bg-[var(--color-green-50)] transition-colors text-sm"
+            aria-label="Exporter l'historique au format Excel"
           >
             Exporter Excel
           </button>
           <button
             onClick={handleResetHistory}
             className="px-3 py-1 bg-red-500 text-white rounded-xl hover:bg-red-600 transition-colors text-sm"
+            aria-label="Réinitialiser l'historique des conversions"
           >
             Réinitialiser
           </button>
         </div>
       </div>
 
-      <div className="divide-y divide-[var(--color-green-100)]">
+      <div className="divide-y divide-[var(--color-green-100)]" role="list">
         {Object.entries(groupedConversions).map(([date, dayConversions]) => (
-          <div key={date} className="p-4">
+          <div key={date} className="p-4" role="group" aria-label={`Conversions du ${date}`}>
             <h3 className="text-sm font-semibold text-[var(--color-green-800)] mb-2">{date}</h3>
             <div className="space-y-3">
               {dayConversions.map((conversion, index) => (
                 <div
                   key={`${conversion.from}-${conversion.to}-${conversion.timestamp}-${index}`}
                   className="p-3 bg-white rounded-lg hover:bg-[var(--color-amber-50)] transition-all duration-200 ease-in-out"
+                  role="listitem"
                 >
                   <div className="flex justify-between items-start">
                     <div className="space-y-1">
@@ -103,7 +115,9 @@ export const ConversionHistory: React.FC = () => {
                         <span className="font-medium text-[var(--color-green-800)]">
                           {conversion.from}
                         </span>
-                        <span className="text-[var(--color-amber-600)]">→</span>
+                        <span className="text-[var(--color-amber-600)]" aria-hidden="true">
+                          →
+                        </span>
                         <span className="font-medium text-[var(--color-green-800)]">
                           {conversion.to}
                         </span>

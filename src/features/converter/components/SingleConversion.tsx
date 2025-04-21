@@ -48,11 +48,14 @@ export const SingleConversion: React.FC = () => {
   );
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" role="region" aria-label="Conversion simple">
       <div className="single-conversion-container">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-semibold text-[var(--color-green-800)] mb-2">
+            <label
+              htmlFor="amount"
+              className="block text-sm font-semibold text-[var(--color-green-800)] mb-2"
+            >
               Montant
             </label>
             <input
@@ -62,6 +65,9 @@ export const SingleConversion: React.FC = () => {
               onChange={handleInputChange}
               className="block w-full px-4 py-3 text-lg border-2 border-[var(--color-green-200)] focus:border-[var(--color-green-500)] focus:ring-2 focus:ring-[var(--color-green-400)] rounded-xl transition-all duration-200 ease-in-out"
               placeholder="Entrez un montant"
+              aria-label="Montant à convertir"
+              inputMode="decimal"
+              pattern="[0-9]*[.,]?[0-9]*"
             />
           </div>
 
@@ -90,26 +96,30 @@ export const SingleConversion: React.FC = () => {
           <button
             onClick={handleAddFavorite}
             className="px-6 py-3 bg-[var(--color-amber-100)] hover:bg-[var(--color-amber-200)] text-[var(--color-amber-800)] font-semibold rounded-xl shadow-md hover:shadow-lg transition-all duration-200 ease-in-out flex items-center gap-2"
+            aria-label="Ajouter cette paire de devises aux favoris"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5"
               viewBox="0 0 20 20"
               fill="currentColor"
+              aria-hidden="true"
             >
               <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
             </svg>
-            Ajouter aux favoris
+            <span>Ajouter aux favoris</span>
           </button>
           <button
             onClick={handleReset}
             className="px-6 py-3 bg-[var(--color-gray-100)] hover:bg-[var(--color-gray-200)] text-[var(--color-gray-700)] font-semibold rounded-xl shadow-md hover:shadow-lg transition-all duration-200 ease-in-out flex items-center gap-2"
+            aria-label="Réinitialiser la conversion"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5"
               viewBox="0 0 20 20"
               fill="currentColor"
+              aria-hidden="true"
             >
               <path
                 fillRule="evenodd"
@@ -117,7 +127,7 @@ export const SingleConversion: React.FC = () => {
                 clipRule="evenodd"
               />
             </svg>
-            Réinitialiser
+            <span>Réinitialiser</span>
           </button>
         </div>
       </div>

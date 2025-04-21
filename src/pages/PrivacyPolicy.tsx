@@ -61,6 +61,36 @@ export const PrivacyPolicy: React.FC = () => {
 
             <section>
               <h2 className="text-xl font-semibold mb-3">
+                1bis. Données stockées localement dans le navigateur
+              </h2>
+              <ul className="list-disc pl-6 mt-2 space-y-2">
+                <li className="mt-2">
+                  Outre les données collectées via des outils d’analyse anonymes, nous stockons
+                  localement certaines informations dans votre navigateur à l’aide du localStorage,
+                  exclusivement à des fins fonctionnelles. Ces données ne sont jamais transmises à
+                  des tiers et restent accessibles uniquement sur l’appareil utilisé.
+                </li>
+                <li>
+                  Les données stockées localement comprennent : Vos conversions précédentes
+                  (historique) Vos paires de devises favorites{' '}
+                </li>
+                <li className="mt-2">
+                  Ces données sont utilisées uniquement pour : Vous permettre de retrouver votre
+                  historique de conversions Simplifier l’usage récurrent du convertisseur en
+                  enregistrant vos préférences Vous pouvez à tout moment effacer ces données via le
+                  bouton “Supprimer mes données locales” disponible dans l’interface du site.
+                </li>
+
+                <li className="mt-2">
+                  Les fichiers Excel et JSON générés lors de l’export de vos conversions sont créés
+                  localement sur votre appareil. Aucune donnée n’est transmise ou stockée sur un
+                  serveur. Ces fichiers sont destinés à un usage personnel et ne sont accessibles
+                  que depuis votre propre appareil.
+                </li>
+              </ul>
+            </section>
+            <section>
+              <h2 className="text-xl font-semibold mb-3">
                 2. Utilisation des cookies et technologies similaires
               </h2>
               <p>

@@ -54,7 +54,7 @@ export const MultipleConversion: React.FC = () => {
             };
             addFavorite(favorite);
           }}
-         className="px-6 py-3 bg-[var(--color-amber-100)] hover:bg-[var(--color-amber-200)] text-[var(--color-amber-800)] font-semibold rounded-xl shadow-md hover:shadow-lg transition-all duration-200 ease-in-out flex items-center gap-2"
+          className="px-6 py-3 bg-[var(--color-amber-100)] hover:bg-[var(--color-amber-200)] text-[var(--color-amber-800)] font-semibold rounded-xl shadow-md hover:shadow-lg transition-all duration-200 ease-in-out flex items-center gap-2"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

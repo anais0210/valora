@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useConverterStore } from '../store';
 import { Conversion } from '../types';
 
@@ -6,6 +6,7 @@ export const useConversion = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [debounceTimer, setDebounceTimer] = useState<ReturnType<typeof setTimeout> | null>(null);
+  const prevCurrenciesRef = useRef({ from: '', to: '' });
 
   const {
     currentConversion,
@@ -19,30 +20,42 @@ export const useConversion = () => {
     addConversion,
   } = useConverterStore();
 
-  // Effet pour récupérer le taux de change
+  // Utiliser useCallback pour la fonction fetchExchangeRate
+  const fetchExchangeRate = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch('https://api.exchangerate-api.com/v4/latest/EUR');
+      const data = await response.json();
+
+      const rate =
+        fromCurrency === 'EUR'
+          ? data.rates[toCurrency]
+          : data.rates[toCurrency] / data.rates[fromCurrency];
+
+      updateExchangeRate(rate);
+    } catch (err) {
+      console.error('Erreur lors de la récupération du taux de change:', err);
+      setError('Impossible de récupérer le taux de change');
+    } finally {
+      setIsLoading(false);
+    }
+  }, [fromCurrency, toCurrency, updateExchangeRate]);
+
+  // Effet pour récupérer le taux de change uniquement quand les devises changent
   useEffect(() => {
-    const fetchExchangeRate = async () => {
-      setIsLoading(true);
-      try {
-        const response = await fetch('https://api.exchangerate-api.com/v4/latest/EUR');
-        const data = await response.json();
+    // Vérifier si les devises ont réellement changé
+    if (
+      prevCurrenciesRef.current.from === fromCurrency &&
+      prevCurrenciesRef.current.to === toCurrency
+    ) {
+      return;
+    }
 
-        const rate =
-          fromCurrency === 'EUR'
-            ? data.rates[toCurrency]
-            : data.rates[toCurrency] / data.rates[fromCurrency];
-
-        updateExchangeRate(rate);
-      } catch (err) {
-        console.error('Erreur lors de la récupération du taux de change:', err);
-        setError('Impossible de récupérer le taux de change');
-      } finally {
-        setIsLoading(false);
-      }
-    };
+    // Mettre à jour la référence
+    prevCurrenciesRef.current = { from: fromCurrency, to: toCurrency };
 
     fetchExchangeRate();
-  }, [fromCurrency, toCurrency, updateExchangeRate]);
+  }, [fetchExchangeRate, fromCurrency, toCurrency]);
 
   // Effet pour mettre à jour la conversion quand le taux change
   useEffect(() => {
@@ -55,7 +68,7 @@ export const useConversion = () => {
       };
       updateCurrentConversion(updatedConversion);
     }
-  }, [exchangeRate, currentConversion?.amount, updateCurrentConversion]);
+  }, [exchangeRate, currentConversion, updateCurrentConversion]);
 
   const debouncedAddConversion = useCallback(
     (conversion: Conversion) => {

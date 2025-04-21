@@ -19,8 +19,13 @@ export const SingleConversion: React.FC = () => {
 
   const handleInputChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      const value = e.target.value.replace(',', '.');
-      const amount = parseFloat(value);
+      const value = e.target.value;
+      if (value === '') {
+        handleAmountChange(0);
+        return;
+      }
+      const cleanValue = value.replace(',', '.');
+      const amount = parseFloat(cleanValue);
       if (!isNaN(amount)) {
         handleAmountChange(amount);
       }

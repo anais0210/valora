@@ -54,7 +54,7 @@ export const useConversion = () => {
     };
 
     fetchExchangeRate();
-  }, [fromCurrency, toCurrency, updateExchangeRate]);
+  }, [fromCurrency, toCurrency, updateExchangeRate, currentConversion, updateCurrentConversion]);
 
   // Effet séparé pour mettre à jour le résultat lorsque le taux de change ou la conversion change
   useEffect(() => {
@@ -67,7 +67,7 @@ export const useConversion = () => {
       };
       updateCurrentConversion(updatedConversion);
     }
-  }, [exchangeRate, currentConversion?.amount, updateCurrentConversion]);
+  }, [exchangeRate, currentConversion, updateCurrentConversion]);
 
   const debouncedAddConversion = useCallback(
     (conversion: Conversion) => {

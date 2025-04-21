@@ -1,8 +1,23 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 export const AccessibilityStatement: React.FC = () => {
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
+      <Link
+        to="/"
+        className="inline-flex items-center text-[var(--color-green-800)] hover:text-[var(--color-green-600)] mb-6"
+      >
+        <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M10 19l-7-7m0 0l7-7m-7 7h18"
+          />
+        </svg>
+        Retour à l'accueil
+      </Link>
       <h1 className="text-3xl font-bold text-[var(--color-green-800)] mb-8">
         Déclaration d'accessibilité - Valora
       </h1>

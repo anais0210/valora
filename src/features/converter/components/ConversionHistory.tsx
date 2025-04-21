@@ -34,15 +34,28 @@ export const ConversionHistory: React.FC = () => {
 
   if (conversions.length === 0) {
     return (
-      <div className="bg-surface-light rounded-lg p-4 border-2 border-primary-200 text-center">
-        <p className="text-primary-600">Aucune conversion enregistrée</p>
+      <div className="bg-[var(--color-beige-light)] rounded-xl p-4 border-2 border-[var(--color-green-200)] text-center shadow-sm">
+        <p className="text-[var(--color-green-800)]">Aucune conversion enregistrée</p>
       </div>
     );
   }
 
+  // Grouper les conversions par jour
+  const groupedConversions = conversions.reduce(
+    (groups, conversion) => {
+      const date = new Date(conversion.timestamp).toLocaleDateString('fr-FR');
+      if (!groups[date]) {
+        groups[date] = [];
+      }
+      groups[date].push(conversion);
+      return groups;
+    },
+    {} as Record<string, typeof conversions>
+  );
+
   return (
-    <div className="bg-surface-light rounded-lg shadow-lg border-2 border-primary-200 overflow-hidden">
-      <div className="bg-gradient-to-r from-primary-500 to-primary-600 p-4 flex justify-between items-center">
+    <div className="bg-[var(--color-beige-light)] rounded-xl shadow-md border-2 border-[var(--color-green-200)] overflow-hidden">
+      <div className="bg-gradient-to-r from-[var(--color-green-500)] to-[var(--color-green-600)] p-4 flex justify-between items-center">
         <h2 className="text-lg font-bold text-white flex items-center gap-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -61,45 +74,56 @@ export const ConversionHistory: React.FC = () => {
         <div className="flex space-x-2">
           <button
             onClick={handleExportExcel}
-            className="px-3 py-1 bg-white text-primary-600 rounded-lg hover:bg-primary-50 transition-colors text-sm"
+            className="px-3 py-1 bg-white text-[var(--color-green-600)] rounded-xl hover:bg-[var(--color-green-50)] transition-colors text-sm"
           >
             Exporter Excel
           </button>
           <button
             onClick={handleResetHistory}
-            className="px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors text-sm"
+            className="px-3 py-1 bg-red-500 text-white rounded-xl hover:bg-red-600 transition-colors text-sm"
           >
             Réinitialiser
           </button>
         </div>
       </div>
 
-      <div className="divide-y divide-primary-100">
-        {conversions.map((conversion, index) => (
-          <div
-            key={`${conversion.from}-${conversion.to}-${conversion.timestamp}-${index}`}
-            className="p-4 bg-gradient-to-r from-surface-light to-surface hover:from-primary-50 hover:to-primary-100 transition-all duration-200"
-          >
-            <div className="flex justify-between items-start">
-              <div className="space-y-1">
-                <div className="flex items-center space-x-2">
-                  <span className="font-medium text-primary-700">{conversion.from}</span>
-                  <span className="text-primary-400">→</span>
-                  <span className="font-medium text-primary-700">{conversion.to}</span>
+      <div className="divide-y divide-[var(--color-green-100)]">
+        {Object.entries(groupedConversions).map(([date, dayConversions]) => (
+          <div key={date} className="p-4">
+            <h3 className="text-sm font-semibold text-[var(--color-green-800)] mb-2">{date}</h3>
+            <div className="space-y-3">
+              {dayConversions.map((conversion, index) => (
+                <div
+                  key={`${conversion.from}-${conversion.to}-${conversion.timestamp}-${index}`}
+                  className="p-3 bg-white rounded-lg hover:bg-[var(--color-amber-50)] transition-all duration-200 ease-in-out"
+                >
+                  <div className="flex justify-between items-start">
+                    <div className="space-y-1">
+                      <div className="flex items-center space-x-2">
+                        <span className="font-medium text-[var(--color-green-800)]">
+                          {conversion.from}
+                        </span>
+                        <span className="text-[var(--color-amber-600)]">→</span>
+                        <span className="font-medium text-[var(--color-green-800)]">
+                          {conversion.to}
+                        </span>
+                      </div>
+                      <div className="text-sm text-[var(--color-green-700)]">
+                        {conversion.amount.toFixed(settings.decimalPlaces)} {conversion.from} ={' '}
+                        <span className="font-semibold">
+                          {conversion.result.toFixed(settings.decimalPlaces)} {conversion.to}
+                        </span>
+                      </div>
+                      <div className="text-xs text-[var(--color-green-600)]">
+                        Taux: 1 {conversion.from} = {conversion.rate.toFixed(4)} {conversion.to}
+                      </div>
+                    </div>
+                    <div className="text-xs text-[var(--color-amber-600)]">
+                      {new Date(conversion.timestamp).toLocaleTimeString('fr-FR')}
+                    </div>
+                  </div>
                 </div>
-                <div className="text-sm text-primary-600">
-                  {conversion.amount.toFixed(settings.decimalPlaces)} {conversion.from} ={' '}
-                  <span className="font-semibold">
-                    {conversion.result.toFixed(settings.decimalPlaces)} {conversion.to}
-                  </span>
-                </div>
-                <div className="text-xs text-primary-500">
-                  Taux: 1 {conversion.from} = {conversion.rate.toFixed(4)} {conversion.to}
-                </div>
-              </div>
-              <div className="text-xs text-primary-400">
-                {new Date(conversion.timestamp).toLocaleString()}
-              </div>
+              ))}
             </div>
           </div>
         ))}

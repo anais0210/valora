@@ -32,7 +32,7 @@ export const SingleConversion: React.FC = () => {
       <div className="single-conversion-container">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label htmlFor="amount" className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-semibold text-[var(--color-green-800)] mb-2">
               Montant
             </label>
             <input
@@ -40,7 +40,7 @@ export const SingleConversion: React.FC = () => {
               id="amount"
               value={localAmount}
               onChange={handleInputChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              className="block w-full px-4 py-3 text-lg border-2 border-[var(--color-green-200)] focus:border-[var(--color-green-500)] focus:ring-2 focus:ring-[var(--color-green-400)] rounded-xl transition-all duration-200 ease-in-out"
               placeholder="Entrez un montant"
             />
           </div>
@@ -76,7 +76,7 @@ export const SingleConversion: React.FC = () => {
               };
               addFavorite(favorite);
             }}
-            className="px-6 py-3 bg-secondary-100 hover:bg-secondary-200 text-secondary-700 font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center gap-2"
+            className="px-6 py-3 bg-[var(--color-amber-100)] hover:bg-[var(--color-amber-200)] text-[var(--color-amber-800)] font-semibold rounded-xl shadow-md hover:shadow-lg transition-all duration-200 ease-in-out flex items-center gap-2"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -90,7 +90,7 @@ export const SingleConversion: React.FC = () => {
           </button>
           <button
             onClick={handleReset}
-            className="px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center gap-2"
+            className="px-6 py-3 bg-[var(--color-gray-100)] hover:bg-[var(--color-gray-200)] text-[var(--color-gray-700)] font-semibold rounded-xl shadow-md hover:shadow-lg transition-all duration-200 ease-in-out flex items-center gap-2"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

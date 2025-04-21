@@ -11,15 +11,15 @@ export const FavoritePairs: React.FC<FavoritePairsProps> = ({ onSelectPair }) =>
 
   if (favorites.length === 0) {
     return (
-      <div className="bg-surface-light rounded-lg p-4 border-2 border-secondary-200 text-center">
-        <p className="text-secondary-600">Aucune paire favorite enregistrée</p>
+      <div className="bg-[var(--color-beige-light)] rounded-xl p-4 border-2 border-[var(--color-green-200)] text-center shadow-sm">
+        <p className="text-[var(--color-green-800)]">Aucune paire favorite enregistrée</p>
       </div>
     );
   }
 
   return (
-    <div className="bg-surface-light rounded-lg shadow-lg border-2 border-secondary-200 overflow-hidden">
-      <div className="bg-gradient-to-r from-secondary-500 to-secondary-600 p-4">
+    <div className="bg-[var(--color-beige-light)] rounded-xl shadow-md border-2 border-[var(--color-green-200)] overflow-hidden">
+      <div className="bg-gradient-to-r from-[var(--color-green-500)] to-[var(--color-green-600)] p-4">
         <h2 className="text-lg font-bold text-white flex items-center gap-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -33,17 +33,17 @@ export const FavoritePairs: React.FC<FavoritePairsProps> = ({ onSelectPair }) =>
         </h2>
       </div>
 
-      <div className="divide-y divide-secondary-100">
+      <div className="divide-y divide-[var(--color-green-100)]">
         {favorites.map((favorite, index) => (
           <div
             key={`${favorite.from}-${favorite.to}-${index}`}
-            className="p-4 bg-gradient-to-r from-surface-light to-surface hover:from-secondary-50 hover:to-secondary-100 transition-all duration-200 cursor-pointer group flex justify-between items-center"
+            className="p-4 bg-white hover:bg-[var(--color-amber-50)] transition-all duration-200 ease-in-out cursor-pointer group flex justify-between items-center"
             onClick={() => onSelectPair(favorite.from, favorite.to)}
           >
             <div className="flex items-center space-x-2">
-              <span className="font-medium text-secondary-700">{favorite.from}</span>
-              <span className="text-secondary-400">→</span>
-              <span className="font-medium text-secondary-700">{favorite.to}</span>
+              <span className="font-medium text-[var(--color-green-800)]">{favorite.from}</span>
+              <span className="text-[var(--color-amber-600)]">→</span>
+              <span className="font-medium text-[var(--color-green-800)]">{favorite.to}</span>
             </div>
 
             <button
@@ -51,7 +51,7 @@ export const FavoritePairs: React.FC<FavoritePairsProps> = ({ onSelectPair }) =>
                 e.stopPropagation();
                 removeFavorite(favorite);
               }}
-              className="opacity-0 group-hover:opacity-100 px-3 py-1 text-secondary-600 hover:text-secondary-800 hover:bg-secondary-100 rounded transition-all duration-200"
+              className="opacity-0 group-hover:opacity-100 px-3 py-1 text-[var(--color-amber-600)] hover:text-[var(--color-amber-800)] hover:bg-[var(--color-amber-100)] rounded-xl transition-all duration-200 ease-in-out"
             >
               Supprimer
             </button>

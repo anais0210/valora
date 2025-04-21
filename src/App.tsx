@@ -4,6 +4,7 @@ import { SpeedInsights } from '@vercel/speed-insights/react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Footer } from './components/Footer';
 import { PrivacyPolicy } from './pages/PrivacyPolicy';
+import { AccessibilityStatement } from './pages/AccessibilityStatement';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
             <Routes>
               <Route path="/" element={<CurrencyConverter />} />
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+              <Route path="/accessibility" element={<AccessibilityStatement />} />
             </Routes>
           </div>
         </main>
